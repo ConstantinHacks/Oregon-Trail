@@ -1,0 +1,28 @@
+body {
+	background-color: black;
+}
+
+#choiceBox {
+	color: white;
+	position: absolute;
+	top: 37%;
+	right: 26%;
+	font-size: 35px;
+}
+
+#landmark {
+	margin-top: 2%;
+}
+
+#dateTime {
+	text-align: center;
+	color: white;
+	font-size: 35px;
+}
+
+#userDirections {
+	font-size: 25px;
+	color: white;
+	text-align: center;
+	margin-top: 2%;
+}

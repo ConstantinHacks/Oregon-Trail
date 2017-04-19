@@ -1,0 +1,30 @@
+body {
+	background-color: black;
+}
+
+#choiceBox {
+	color: white;
+	position: absolute;
+	top: 37%;
+	right: 26%;
+	font-size: 35px;
+}
+
+#titleLogo {
+	width: 1000px;
+    height: 200px;
+}
+
+#inputBox {
+	position: absolute;
+	bottom: 1%;
+	width: 98%;
+	height: 5%
+}
+
+#userInput {
+	width: 100%;
+	height: 100%; 
+	text-align: center;
+	font-size: 30px;
+}

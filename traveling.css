@@ -1,0 +1,29 @@
+body {
+	background-color: black;
+}
+
+#wrapper {
+	height: 100vh;
+}
+
+#traveling {
+	height: 50%;
+	margin-bottom: 20px;
+}
+
+#travelingGif {
+	width: 70%;
+}
+
+#userStats {
+	color: white;
+	height: 40%;
+	text-align: center;
+	font-size: 25px;
+}
+
+#userDirections {
+	font-size: 25px;
+	color: white;
+	text-align: center;
+}
