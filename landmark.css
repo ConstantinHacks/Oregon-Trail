@@ -6,7 +6,8 @@ body {
 	color: white;
 	position: absolute;
 	top: 37%;
-	right: 26%;
+	right: 50%;
+	-webkit-transform: translate(50%,0%);
 	font-size: 35px;
 }
 
