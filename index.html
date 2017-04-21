@@ -11,7 +11,7 @@
 		<script type="text/javascript" src="driver.js"></script>
 	</head>
 
-	<body>
+	<body onload="init();">
 		<audio autoplay loop>
 				<source src="Country_Hymn.mp3" type="audio/mpeg">
 			</audio>
@@ -20,7 +20,7 @@
 				<center><img src="title.jpg" id=titleLogo></center> 
 			</div>
 
-			<div id="choiceBox">
+			<div id="choiceBox" class="centerBox">
 				You may:
 				<br>
 					&emsp; 1. Travel the trail
@@ -39,6 +39,14 @@
 				What is your choice? 
 			</div>
 			<input type="text" id="userInput" placeholder="Enter your choice here">
+			<div id="trailInfoPageOne" class="centerBox">
+				Try taking a journey by covered wagon across 2000 miles of plains, rivers, and mountains. Try! On the plains, will you slosh your oxen through mud and water-filled ruts or will you plod through dust six inches deep?
+			</div>
+			<div id="trailInfoPageTwo" class="centerBox">
+				How will you cross the rivers? If you have money, you might take a ferry (if there is a ferry). Or, you can ford the river and hope you and your wagon aren't swallowed alive!
+			</div>
+			<div id="userDirections"> <i>Press <b>SPACE BAR</b> to continue.</i> </div>
+			
 		</div>
 
 	</body>

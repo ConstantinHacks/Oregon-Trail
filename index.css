@@ -6,7 +6,7 @@ body {
 	background-color: black;
 }
 
-#choiceBox {
+.centerBox {
 	color: white;
 	position: absolute;
 	top: 37%;
@@ -33,4 +33,14 @@ body {
 
 input:focus {
 	outline: none;
+}
+
+#userDirections {
+	font-size: 25px;
+	color: white;
+	text-align: center;
+	margin-top: 2%;
+	position: absolute;
+	bottom: 1%;
+	width: 98%;
 }
