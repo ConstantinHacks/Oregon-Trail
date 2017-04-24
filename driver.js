@@ -1,9 +1,37 @@
+//Contant Values for Travelar Health. Corresponds to high-score calculation values.
+GOOD_HEALTH = 500;
+FAIR_HEALTH = 400;
+POOR_HEALTH = 300;
+VERY_POOR_HEALTH = 200;
+
+//Menu set constant declarations
+MENUSET = 1;
+CREATEGAMESET = 2;
+
 // Called when page loads
 
 // global variables to determine what answers the system should expect from the user
 var selectionSet;
 // looking for a yes/no question
 var yesNoQ;
+
+
+var game;
+
+
+//Game Class
+function Game(occupation){
+   this.occupation = occupation;
+   //rest of the attributes added as they are entered.
+}
+//Traveler Class
+function Traveler(name){
+   this.name = name
+   this.health = GOOD_HEALTH
+   this.illness = "none"
+   
+   
+}
 
 function init() {
 	// document.getElementById("choiceBox").style.display = 'none';
@@ -15,7 +43,15 @@ function init() {
 	document.getElementById("trailInfoPageOne").style.display = 'none';
 	document.getElementById("trailInfoPageTwo").style.display = 'none';
 
-  selectionSet = 1;
+  selectionSet = MENUSET;
+  yesNoQ = 0;
+}
+
+function createGame() {
+  // document.getElementById("userDirections").style.display = 'none';
+	// document.getElementById("trailInfoPageOne").style.display = 'none';
+	// document.getElementById("trailInfoPageTwo").style.display = 'none';
+  selectionSet = CREATEGAMESET;
   yesNoQ = 0;
 }
 /*
@@ -59,9 +95,12 @@ function parseText(text)
       case '1':
         //do stuff
         console.log("selection was " + text);
-        if(state == 1)
+        if(selectionSet == MENUSET)
         {
-
+          $(location).attr('href', 'createGame.html')
+        } else if(selectionSet == CREATEGAMESET) {
+          console.log("Banker");
+          game = new Game("Banker");
         }
         else
         {
@@ -71,11 +110,14 @@ function parseText(text)
       case '2':
         //do stuff
         console.log("selection was " + text);
-        if(state == 1)
+        if(selectionSet == MENUSET)
         {
 
+        }else if(selectionSet == CREATEGAMESET) {
+          console.log("Carpenter");
+          game = new Game("Carpenter");
         }
-        else
+        else 
         {
           
         }
@@ -83,9 +125,12 @@ function parseText(text)
       case '3':
         console.log("selection was " + text);
         //do stuff
-        if(state == 1)
+        if(selectionSet == MENUSET)
         {
 
+        }else if(selectionSet == CREATEGAMESET) {
+          console.log("Farmer");
+          game = new Game("Farmer");
         }
         else
         {
@@ -95,9 +140,11 @@ function parseText(text)
       case '4':
         //do stuff
         console.log("selection was " + text);
-        if(state == 1)
+        if(selectionSet == MENUSET)
         {
-
+          console.log("Learn More");
+        }else if(selectionSet == CREATEGAMESET) {
+          
         }
         else
         {
@@ -107,9 +154,11 @@ function parseText(text)
       case '5':
         //do stuff
         console.log("selection was " + text);
-        if(state == 1)
+        if(selectionSet == MENUSET)
         {
 
+        }else if(selectionSet == CREATEGAMESET) {
+          
         }
         else
         {
@@ -119,9 +168,11 @@ function parseText(text)
       case '6':
         //do stuff
         console.log("selection was " + text);
-        if(state == 1)
+        if(selectionSet == MENUSET)
         {
 
+        }else if(selectionSet == CREATEGAMESET) {
+          
         }
         else
         {
