@@ -18,16 +18,20 @@ function init() {
   selectionSet = 1;
   yesNoQ = 0;
 }
+/*
+$(document).ready(function(*/
 
-// test?
-$(document).keypress(function(key) {
-  if(key.which == 13) {
-  	var userInput = document.getElementById("userInput").value;
-    parseText(userInput);
-    alert("selection was " + userInput);
-    document.getElementById("userInput").value = ""; // resets input
-  } 
-});
+  $(document).keypress(function(key) {
+    if(key.which == 13) {
+      var userInput = document.getElementById("userInput").value;
+      parseText(userInput);
+      alert("selection was " + userInput);
+      document.getElementById("userInput").value = ""; // resets input
+    } 
+  });
+/*
+));*/
+
 
 function parseText(text)
 {
@@ -103,7 +107,7 @@ function parseText(text)
       case '5':
         //do stuff
         console.log("selection was " + text);
-        f(state == 1)
+        if(state == 1)
         {
 
         }
@@ -115,7 +119,7 @@ function parseText(text)
       case '6':
         //do stuff
         console.log("selection was " + text);
-        f(state == 1)
+        if(state == 1)
         {
 
         }
