@@ -28,34 +28,49 @@ function Game(occupation){
 function Traveler(name){
    this.name = name
    this.health = GOOD_HEALTH
-   this.illness = "none"
-   
-   
+   this.illness = "none" 
 }
 
+// Start Trail Information (LearnAboutTheTrail.html)
+function docReady() {
+	var divs = $('div[id^="content-"]').hide();
+	i = 0;
+	$(document).ready(function(){
+		$(document).keypress(function (e) {
+  			if (e.keyCode === 0 || e.keyCode === 32) {
+  				e.preventDefault();
+  				nextPage(divs,i);
+        	}
+        });
+	});
+
+function nextPage() { 
+    divs.eq(i).fadeIn(400)
+              .delay(5000)
+              .fadeOut(400, nextPage(divs,i));
+
+    i = ++i % divs.length; // increment i, 
+                           //   and reset to 0 when it equals divs.length
+};
+
+}
+
+
+// End Trail Information (LearnAboutTheTrail.html)
+
 function init() {
-	// document.getElementById("choiceBox").style.display = 'none';
-	// document.getElementById("userInput").style.display = 'none';
-	// document.getElementById("trailInfoPageTwo").style.display = 'none';
-
-
-	document.getElementById("userDirections").style.display = 'none';
-	document.getElementById("trailInfoPageOne").style.display = 'none';
-	document.getElementById("trailInfoPageTwo").style.display = 'none';
 
   selectionSet = MENUSET;
   yesNoQ = 0;
 }
 
 function createGame() {
-  // document.getElementById("userDirections").style.display = 'none';
-	// document.getElementById("trailInfoPageOne").style.display = 'none';
-	// document.getElementById("trailInfoPageTwo").style.display = 'none';
+
   selectionSet = CREATEGAMESET;
   yesNoQ = 0;
 }
 /*
-$(document).ready(function(*/
+$(document).ready(function(
 
   $(document).keypress(function(key) {
     if(key.which == 13) {
@@ -71,7 +86,7 @@ $(document).ready(function(*/
 
 function parseText(text)
 {
-  // if it is a yes noi question, parse differently
+  // if it is a yes no question, parse differently
   if(yesNoQ)
   {
     if(text.match(/^y/))
@@ -88,22 +103,19 @@ function parseText(text)
     }
   }
   // otherwise matches a value 1-6
-  else
-  {
-    switch(text)
-    {
+  else {
+  	switch(text) {
       case '1':
         //do stuff
         console.log("selection was " + text);
-        if(selectionSet == MENUSET)
+        if(selectionSet == MENUSET) 
         {
-          $(location).attr('href', 'createGame.html')
-        } else if(selectionSet == CREATEGAMESET) {
+        	$(location).attr('href', 'createGame.html')
+        } 
+        else if(selectionSet == CREATEGAMESET) {
           console.log("Banker");
           game = new Game("Banker");
-        }
-        else
-        {
+        } else {
 
         }
         break;

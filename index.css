@@ -44,3 +44,7 @@ input:focus {
 	bottom: 1%;
 	width: 98%;
 }
+
+#content-2 {
+	display: none;
+}
