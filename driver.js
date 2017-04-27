@@ -7,6 +7,7 @@ VERY_POOR_HEALTH = 200;
 //Menu set constant declarations
 MENUSET = 1;
 CREATEGAMESET = 2;
+PICKMONTHSET = 3;
 
 // Called when page loads
 
@@ -20,15 +21,16 @@ var game;
 
 
 //Game Class
-function Game(occupation){
+function Game(occupation,money){
    this.occupation = occupation;
+   this.money = money;
    //rest of the attributes added as they are entered.
 }
 //Traveler Class
 function Traveler(name){
    this.name = name
    this.health = GOOD_HEALTH
-   this.illness = "none" 
+   this.illness = "none"
 }
 
 // Start Trail Information (LearnAboutTheTrail.html)
@@ -59,7 +61,6 @@ function nextPage() {
 // End Trail Information (LearnAboutTheTrail.html)
 
 function init() {
-
   selectionSet = MENUSET;
   yesNoQ = 0;
 }
@@ -69,20 +70,47 @@ function createGame() {
   selectionSet = CREATEGAMESET;
   yesNoQ = 0;
 }
-/*
-$(document).ready(function(
 
-  $(document).keypress(function(key) {
+$(document).keypress(function(key) {
     if(key.which == 13) {
       var userInput = document.getElementById("userInput").value;
       parseText(userInput);
       alert("selection was " + userInput);
       document.getElementById("userInput").value = ""; // resets input
     } 
-  });
-/*
-));*/
+});
 
+
+function store(){
+  var currentGame = JSON.parse(localStorage.getItem('currentGame'));
+  document.getElementById("textBox").innerHTML = "Before leaving Independence you should buy equipment and supplies, you have "+ currentGame.money +" in cash, but don't have to spend it all now."
+}
+
+function addPartyMembers(partyMembers){
+
+  var travelers = [];
+
+  travelers.push(new Traveler( $('#leaderName').val() ))
+  travelers.push(new Traveler( $('#member2').val() ))
+  travelers.push(new Traveler( $('#member3').val() ))
+  travelers.push(new Traveler( $('#member4').val() ))
+  travelers.push(new Traveler( $('#member5').val() ))
+
+  console.log(travelers);
+
+  var currentGame = JSON.parse(localStorage.getItem('currentGame'));
+
+  currentGame.party = travelers;
+
+  //pick month departure date
+  redirect('pickMonth.html',currentGame)
+}
+
+function chooseMonth(){
+
+  game = JSON.parse(localStorage.getItem('currentGame'));
+  selectionSet = PICKMONTHSET; 
+}
 
 function parseText(text)
 {
@@ -114,8 +142,14 @@ function parseText(text)
         } 
         else if(selectionSet == CREATEGAMESET) {
           console.log("Banker");
-          game = new Game("Banker");
-        } else {
+          game = new Game("Banker",1600);
+          redirect('partyForm.html',game)
+        } else if(selectionSet == PICKMONTHSET) {
+          game.date = new Date(1848, 2, 1);
+          redirect('store.html',game);
+        }
+        else
+        {
 
         }
         break;
@@ -127,7 +161,11 @@ function parseText(text)
 
         }else if(selectionSet == CREATEGAMESET) {
           console.log("Carpenter");
-          game = new Game("Carpenter");
+          game = new Game("Carpenter",800);
+          redirect('partyForm.html',game)
+        } else if(selectionSet == PICKMONTHSET) {
+          game.date = new Date(1848, 3, 1);
+          redirect('store.html',game);
         }
         else 
         {
@@ -142,7 +180,11 @@ function parseText(text)
 
         }else if(selectionSet == CREATEGAMESET) {
           console.log("Farmer");
-          game = new Game("Farmer");
+          game = new Game("Farmer",400);
+          redirect('partyForm.html',game)
+        } else if(selectionSet == PICKMONTHSET) {
+          game.date = new Date(1848, 4, 1);
+          redirect('store.html',game);
         }
         else
         {
@@ -157,6 +199,9 @@ function parseText(text)
           console.log("Learn More");
         }else if(selectionSet == CREATEGAMESET) {
           
+        } else if(selectionSet == PICKMONTHSET) {
+          game.date = new Date(1848, 5, 1);
+          redirect('store.html',game);
         }
         else
         {
@@ -171,6 +216,9 @@ function parseText(text)
 
         }else if(selectionSet == CREATEGAMESET) {
           
+        }else if(selectionSet == PICKMONTHSET) {
+          game.date = new Date(1848, 6, 1);
+          redirect('store.html',game);
         }
         else
         {
@@ -200,6 +248,11 @@ function parseText(text)
 
 }
 
+
+function redirect(path,gameState){
+  localStorage.setItem('currentGame', JSON.stringify(gameState));
+  $(location).attr('href', path)
+}
 
 // How to call this function only when above userInput is 2?
 // function optionTwo() {

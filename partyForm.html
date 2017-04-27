@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8 />
+
+		<title>The Oregon Trail</title>
+
+		<link rel="stylesheet" type="text/css" href="index.css">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+        <script type="text/javascript" src="partyForm.js"></script>
+		<script type="text/javascript" src="driver.js"></script>
+	</head>
+
+	<body>
+		<div id="wrapper">
+			<div id=homeBox>
+				<center><img src="seperator.jpg" id=seperator></center> 
+			</div>
+			<div id="choiceBox" class="centerBox">
+                What are the names of the people in your party? The first name should be your leader.
+				<br><br>
+				<form>
+                    1.
+                    <input type="text" id="leaderName">
+                    <br>
+                    2.
+                    <input type="text" id="member2">
+                    <br>
+                    3.
+                    <input type="text" id="member3">
+                    <br>
+                    4.
+                    <input type="text" id="member4">
+                    <br>
+                    5.
+                    <input type="text" id="member5">
+                    <br>
+                    <input type="button" value="Submit" onClick="addPartyMembers(this.form)">
+                </form>
+			</div>
+
+		</div>
+
+	</body>
+
+</html>
