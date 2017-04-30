@@ -8,6 +8,10 @@ VERY_POOR_HEALTH = 200;
 MENUSET = 1;
 CREATEGAMESET = 2;
 PICKMONTHSET = 3;
+STOREINTRO1 = 4;
+STOREINTRO2 = 5;
+STOREINTRO3 = 6;
+STOREINTRO4 = 7;
 
 // Called when page loads
 
@@ -59,14 +63,12 @@ function nextPage() {
 
 
 // End Trail Information (LearnAboutTheTrail.html)
-
 function init() {
   selectionSet = MENUSET;
   yesNoQ = 0;
 }
 
 function createGame() {
-
   selectionSet = CREATEGAMESET;
   yesNoQ = 0;
 }
@@ -84,6 +86,10 @@ $(document).keypress(function(key) {
 function store(){
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
   document.getElementById("textBox").innerHTML = "Before leaving Independence you should buy equipment and supplies, you have "+ currentGame.money +" in cash, but don't have to spend it all now."
+  document.getElementById("userInput").placeholder = "Press SPACE BAR to continue"
+  document.getElementById("userInput").disabled = true
+  selectionSet = STOREINTRO1
+  // $('.userInput').attr('placeholder','Press SPACE BAR to continue');
 }
 
 function addPartyMembers(partyMembers){
@@ -259,14 +265,31 @@ function redirect(path,gameState){
 // 	switchPage("choiceBox", "trailInfoPageOne");
 // 	switchPage("userInput", "userDirections");
 
-// 	$(document).keypress(function (e) {
-// 	  if (e.keyCode === 0 || e.keyCode === 32) {
-// 	    e.preventDefault()
-// 	    console.log('Space pressed')
-// 	    switchPage("trailInfoPageOne", "trailInfoPageTWo");
-// 	  }
-// 	});
-// // }
+	$(document).keypress(function (e) {
+	  if (e.keyCode === 0 || e.keyCode === 32) {
+	    e.preventDefault()
+	    console.log('Space pressed', selectionSet)
+      switch(selectionSet){
+        case STOREINTRO1:
+          document.getElementById("textBox").innerHTML = "You can buy whatever you need at Matt's General Store"
+          selectionSet++;
+          break;
+        case STOREINTRO2:
+          document.getElementById("greeting").style.display = "block"
+          document.getElementById("textBox").style.display = "none"
+          document.getElementById("ul1").style.display = "block"
+          selectionSet++;
+          break;
+        case STOREINTRO3:
+          document.getElementById("ul1").style.display = "none"
+          document.getElementById("ul2").style.display = "block"
+          selectionSet++;
+          break;
+    }
+
+	  }
+	});
+// }
 
 // function switchPage(removeID, showID) {
 // 	document.getElementById(removeID).style.display = 'none';

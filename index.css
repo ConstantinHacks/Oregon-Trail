@@ -15,6 +15,12 @@ body {
 	font-size: 35px;
 }
 
+.merchant{
+	top: 37%;
+	right: 50;
+	-webkit-transform: translate(50%,0%);
+}
+
 #titleLogo {
 	width: 1000px;
     height: 200px;
