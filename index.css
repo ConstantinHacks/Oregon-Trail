@@ -9,10 +9,15 @@ body {
 .centerBox {
 	color: white;
 	position: absolute;
-	top: 37%;
+	/*top: 37%;*/
 	right: 50%;
 	-webkit-transform: translate(50%,0%);
 	font-size: 35px;
+}
+
+hr{
+	size: 15px;
+	border: 1px solid red;
 }
 
 .merchant{
@@ -35,6 +40,14 @@ body {
 	background-color: black;
 	color: white;
 	border: none;
+}
+
+#storeInput {
+	background-color: black;
+	color: white;
+	border: none;
+	font-size: 28px;
+	display: block
 }
 
 input:focus {

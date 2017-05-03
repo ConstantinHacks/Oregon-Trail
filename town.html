@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8 />
+
+		<title>The Oregon Trail</title>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="traveling.css">
+		<script type="text/javascript" src="driver.js"></script>
+	</head>
+
+	<body onload="town();">
+		<audio autoplay loop>
+				<source src="Country_Hymn.mp3" type="audio/mpeg">
+			</audio>
+		<div id="wrapper">
+			<div id="traveling">
+				<center><img src="traveling.png" id=travelingGif></center>
+			</div>
+
+			<div id="town">
+				Welcome to a town
+			</div>
+
+			<div id="userDirections"> <i>Press <b>SPACE BAR</b> to continue.</i> </div>
+		</div>
+	</body>
+</html>

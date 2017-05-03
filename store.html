@@ -17,10 +17,9 @@
 				<center><img src="seperator.jpg" id=seperator></center> 
 			</div>
 
-			<div id="merchant">
-				<img src="matt.png">
+			<div id="merchant" style="width: 150px; float: left;">
+				<img style="width: 150px;" src="matt.png">
 			</div>
-			
 
 			<div id="choiceBox" class="centerBox">
 			<p id="greeting" style="display: none;">Hello, I'm Matt. So you're going to Oregon? I can fix you up with what you need:</p>
@@ -34,14 +33,50 @@
 				<div style="display: none;" id="ul2">
 					<ul>
 					<li>plenty of food for the trip</li>
-					<li>ammunition for your rifles</li>
+					<li>bait for fishing</li>
 					<li>spare parts for your wagon</li>
 					</ul>  
 				</div>
+				<div id="storeHeader" style="display: none;">
+				<p>
+					<hr>					
+					Matt's General Store<br>
+					Independance, Missouri
+					<hr>
+				</p>
+			</div>
 
 
+				<p id="date" style="display: none;"></p>
 
-                <p id="textBox"></lp>
+
+				<ol id="list" style="display: none;">
+					<li id=oxenrow></li>
+					<li id=foodrow></li>
+					<li id=clothingrow></li>
+					<li id=baitrow></li>
+					<li id=sparepartsrow></li>
+				</ol>
+
+				<div id="currentBillDiv" style="display: none;">
+					<hr>
+					<p id="currentBill"></p>
+				</div>
+
+
+				<p id="currentMoney" style="display: none;"></p>
+
+                <p id="textBox"></p>
+
+			</div>
+
+			<div id="itemInfoDiv" class="centerBox" style="display: none;">
+				<p id="itemInfo"></p>
+				<p id="sparePartSale" style="display: none;"></p>
+			</div>
+
+			<div id="resultBox" class="centerBox" style="display: none;">
+				<p id="resultText"></p>
 			</div>
 
 			<input type="text" id="userInput" placeholder="Enter your choice here">
