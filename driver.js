@@ -54,7 +54,7 @@ function Traveler(name){
 
 
 // Start Trail Information (LearnAboutTheTrail.html)
-function docReady() {
+/*function docReady() {
 	var divs = $('div[id^="content-"]').hide();
 	i = 0;
 	$(document).ready(function(){
@@ -65,19 +65,22 @@ function docReady() {
   				nextPage(divs,i);
         	}
         });
-	});
+	});*/
 
-function nextPage() { 
+/*function nextPage() { 
     divs.eq(i).fadeIn(400)
               .delay(5000)
               .fadeOut(400, nextPage(divs,i));
 
     i = ++i % divs.length; // increment i, 
                            //   and reset to 0 when it equals divs.length
-};
+};*/
+$(document).ready(function(){
+  $('#userInput').focus();
+  $('#userInput').focusout(function(){console.log("unfocus"); $('#userInput').focus();});
+});
 
-}
-$('#userInput').focusout(function(){$('#userInput').focus()});
+console.log("here");
 
 // End Trail Information (LearnAboutTheTrail.html)
 function init() {
@@ -91,7 +94,7 @@ function createGame() {
 }
 
 $(document).keypress(function(key) {
-  if(selectionSet != PARTYSELECTSET)
+  if(selectionSet)
   {
     if(key.which == 13) {
       var userInput = document.getElementById("userInput").value;

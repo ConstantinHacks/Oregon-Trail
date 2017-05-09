@@ -17,7 +17,8 @@ $(document).ready(function (){
   $(document).keypress(function(key)
   {
     // having trouble checking if the input box doesn't contain a null value
-    if(key.which == 13 /*&& $(currMember(PARTYMEMBER).value) != ""*/)
+    console.log("registered");
+    if(key.which == 13 && $(currMember(PARTYMEMBER)).val() != "")
     {
       PARTYMEMBER++;
       $(currMember(PARTYMEMBER)).focus();
