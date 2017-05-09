@@ -530,7 +530,7 @@ function storeOverview(){
           break;
         case STOREOUTROSET:
           currentGame.inventory = currentStore
-          redirect("town.html",currentGame)
+          redirect("traveling.html",currentGame)
       }
 
 	  }
