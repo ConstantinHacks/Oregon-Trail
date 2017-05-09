@@ -14,6 +14,7 @@ STOREINTRO4 = 7;
 STOREMAINMENU = 8;
 STOREOUTROSET = 9;
 NOTENOUGHMONEYSET = 10;
+PARTYSELECTSET = 11;
 
 
 
@@ -57,6 +58,7 @@ function docReady() {
 	var divs = $('div[id^="content-"]').hide();
 	i = 0;
 	$(document).ready(function(){
+    $('userInput').focus();
 		$(document).keypress(function (e) {
   			if (e.keyCode === 0 || e.keyCode === 32) {
   				e.preventDefault();
@@ -75,7 +77,7 @@ function nextPage() {
 };
 
 }
-
+$('#userInput').focusout(function(){$('#userInput').focus()});
 
 // End Trail Information (LearnAboutTheTrail.html)
 function init() {
@@ -89,12 +91,15 @@ function createGame() {
 }
 
 $(document).keypress(function(key) {
+  if(selectionSet != PARTYSELECTSET)
+  {
     if(key.which == 13) {
       var userInput = document.getElementById("userInput").value;
       parseText(userInput);
       // alert("selection was " + userInput);
       document.getElementById("userInput").value = ""; // resets input
     } 
+  }
 });
 
 
@@ -257,6 +262,7 @@ function parseText(text)
         else if(selectionSet == CREATEGAMESET) {
           console.log("Banker");
           game = new Game("Banker",1600);
+          selectionSet=PARTYSELECTSET;
           redirect('partyForm.html',game)
         } else if(selectionSet == PICKMONTHSET) {
           game.date = new Date(1848, 2, 1);
@@ -278,6 +284,7 @@ function parseText(text)
         }else if(selectionSet == CREATEGAMESET) {
           console.log("Carpenter");
           game = new Game("Carpenter",800);
+          selectionSet=PARTYSELECTSET;
           redirect('partyForm.html',game)
         } else if(selectionSet == PICKMONTHSET) {
           game.date = new Date(1848, 3, 1);
@@ -299,6 +306,7 @@ function parseText(text)
         }else if(selectionSet == CREATEGAMESET) {
           console.log("Farmer");
           game = new Game("Farmer",400);
+          selectionSet=PARTYSELECTSET;
           redirect('partyForm.html',game)
         } else if(selectionSet == PICKMONTHSET) {
           game.date = new Date(1848, 4, 1);
@@ -485,10 +493,9 @@ function storeOverview(){
 // 	switchPage("userInput", "userDirections");
 
 	$(document).keypress(function (e) {
-	  if (e.keyCode === 0 || e.keyCode === 32) {
+	  if (e.keyCode === 32) {
       var currentGame = JSON.parse(localStorage.getItem('currentGame'));
-	    e.preventDefault()
-	    console.log('Space pressed', selectionSet)
+	    //e.preventDefault();
       switch(selectionSet){
         case STOREINTRO1:
           document.getElementById("textBox").innerHTML = "You can buy whatever you need at Matt's General Store"
