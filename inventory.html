@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8 />
+
+		<title>The Oregon Trail</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="index.css">
+		<script type="text/javascript" src="driver.js"></script>
+
+	</head>
+
+	<body onload="inventory()">
+		<audio autoplay loop>
+				<source src="Country_Hymn.mp3" type="audio/mpeg">
+			</audio>
+		<div id="wrapper" class="centerBox">
+
+			<p> Your Supplies </p>
+			<br>
+			<ol id="list">
+				<li id=oxenrow></li>
+				<li id=foodrow></li>
+				<li id=clothingrow></li>
+				<li id=baitrow></li>
+				<li id=wheelrow></li>
+				<li id=axlerow></li>
+				<li id=tonguerow></li>
+				
+			</ol>
+			<p id="moneyLeft" style="display: none;"></p>
+
+            <div id="images" style="text-align: center">
+                <img style="width: 200px;" src="food.png">
+				<img style="width: 200px;" src="oxen.png">
+				<img style="width: 200px;" src="clothing.png">
+				<img style="width: 200px;" src="bait.png">
+				<img style="width: 200px;" src="spareparts.png">
+            </div>
+
+            <div>
+                <p id="request">You met another ... who wants ...</p>
+                <p id="requestResult">You don't have this</p>
+            </div>
+
+			<div id="userDirections"> <i>Press <b>SPACE BAR</b> to continue.</i> </div>
+		</div>
+	</body>
+</html>

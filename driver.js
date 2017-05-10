@@ -40,9 +40,10 @@ var itemForSale;
 var sparePartIndex = 4;
 
 //Game Class
-function Game(occupation,money){
+function Game(occupation,money,selectionSet){
    this.occupation = occupation;
    this.money = money;
+   this.selectionSet = selectionSet;
    //rest of the attributes added as they are entered.
 }
 //Traveler Class
@@ -141,6 +142,30 @@ function chooseMonth(){
   selectionSet = PICKMONTHSET; 
 }
 
+function inventory(){
+
+  var currentGame = JSON.parse(localStorage.getItem('currentGame'));
+  var inventory = currentGame.inventory;
+
+  // TODO find our if we're trading or just viewing inventory.
+
+  // if(selectionSet == TRADESET){
+
+  // } else if(selectionSet == VIEWINVENTORYSET){
+
+  // } 
+
+  document.getElementById("oxenrow").innerHTML = "Oxen " + inventory.oxen;
+  document.getElementById("foodrow").innerHTML = "Food " + inventory.food;
+  document.getElementById("clothingrow").innerHTML = "Clothing " + inventory.clothing;
+  document.getElementById("baitrow").innerHTML = "Bait " + inventory.bait;
+  document.getElementById("wheelrow").innerHTML = "Wagon wheels " + inventory.wagonWheel;
+  document.getElementById("axlerow").innerHTML = "Wagon axles " + inventory.wagonAxle;
+  document.getElementById("tonguerow").innerHTML = "Wagon toungues " + inventory.wagonTongue;
+    document.getElementById("moneyLeft").style.display = "block";
+  document.getElementById("moneyLeft").innerHTML = "Money left $" + currentGame.money.toFixed(2);
+}
+
 function purchase(amount){
 
   amount = parseInt(amount)
@@ -171,12 +196,16 @@ function purchase(amount){
 }
 
 function notEnoughMoney(){
+  var currentGame = JSON.parse(localStorage.getItem('currentGame'));
+
+  document.getElementById("choiceBox").style.display = "none";
+
   selectionSet = NOTENOUGHMONEYSET
   document.getElementById("userInput").placeholder = "Press SPACE BAR to continue"
   document.getElementById("userInput").disabled = true
   document.getElementById("currentMoney").style.display = "none";
   document.getElementById("resultBox").style.display = "block"
-  document.getElementById("resultText").innerHTML = "Okay, that comes out to a total of $" + currentStore.getBill + ". But I see that you only have $" +currentGame.money + " We'd better go over that list again."
+  document.getElementById("resultText").innerHTML = "Okay, that comes out to a total of $" + currentStore.getBill() + ". But I see that you only have $" +currentGame.money + " We'd better go over that list again."
 }
 
 function storeOutro(){
@@ -264,7 +293,7 @@ function parseText(text)
         } 
         else if(selectionSet == CREATEGAMESET) {
           console.log("Banker");
-          game = new Game("Banker",1600);
+          game = new Game("Banker",1600),selectionSet;
           selectionSet=PARTYSELECTSET;
           redirect('partyForm.html',game)
         } else if(selectionSet == PICKMONTHSET) {
@@ -286,7 +315,7 @@ function parseText(text)
 
         }else if(selectionSet == CREATEGAMESET) {
           console.log("Carpenter");
-          game = new Game("Carpenter",800);
+          game = new Game("Carpenter",800),selectionSet;
           selectionSet=PARTYSELECTSET;
           redirect('partyForm.html',game)
         } else if(selectionSet == PICKMONTHSET) {
@@ -308,7 +337,7 @@ function parseText(text)
 
         }else if(selectionSet == CREATEGAMESET) {
           console.log("Farmer");
-          game = new Game("Farmer",400);
+          game = new Game("Farmer",400,selectionSet);
           selectionSet=PARTYSELECTSET;
           redirect('partyForm.html',game)
         } else if(selectionSet == PICKMONTHSET) {
@@ -426,6 +455,7 @@ function showItem(item){
 }
 
 function redirect(path,gameState){
+  gameState.selectionSet = selectionSet;
   localStorage.setItem('currentGame', JSON.stringify(gameState));
   $(location).attr('href', path)
 }
@@ -462,6 +492,9 @@ function storeOverview(){
   if(document.getElementById("itemImage")){
     $("#itemImage").remove();
   }
+
+  document.getElementById("resultBox").style.display = "none"
+
   document.getElementById("sparePartSale").style.display = "none";
   document.getElementById("oxenrow").innerHTML = "Oxen $" + (currentStore.oxen * OXENCOST).toFixed(2);
   document.getElementById("foodrow").innerHTML = "Food $" + (currentStore.food * FOODCOST).toFixed(2);
@@ -520,11 +553,13 @@ function storeOverview(){
           storeOverview();
           break;
         case STOREMAINMENU:
+          
           if(currentStore.oxen == 0){
             alert("Remember you need oxen to pull your wagon!")
-          } else if(currentStore.getBill > currentGame.money){
+          } else if(currentStore.getBill() > currentGame.money){
             notEnoughMoney();
           } else {
+            currentGame.money -= currentStore.getBill();
             storeOutro();
           }
           break;
