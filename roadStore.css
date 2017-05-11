@@ -1,0 +1,43 @@
+html {
+	background-color: black;
+	font-size: 41px;
+}
+
+#location {
+	background-color: white;
+	padding: 10px;
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	
+}
+
+#choices {
+	position: absolute;
+	right: 50%;
+	top: 20%;
+	color: white;
+}
+
+#moneyAmount {
+	position: absolute;
+	right: 50%;
+	top: 86%;
+	color: white;
+}
+
+input:focus {
+	outline: none;
+}
+
+#userInput {
+	position: absolute;
+	bottom: 1%;
+	width: 98%;
+	text-align: center;
+	font-size: 30px;
+	background-color: black;
+	color: white;
+	border: none;
+}
