@@ -15,15 +15,22 @@ STOREMAINMENU = 8;
 STOREOUTROSET = 9;
 NOTENOUGHMONEYSET = 10;
 PARTYSELECTSET = 11;
+ROADSTORESET = 12;
 
 
-
-//Costs of items in dollars
+//Costs of items in dollars at Matt's Store
 OXENCOST = 40;
 FOODCOST = 0.2;
 CLOTHINGCOST = 10;
-baitBOXCOST = 2;
+BAITBOXCOST = 2;
 SPAREPARTCOST = 10;
+
+//Costs of items in dollars at road store
+OXENCOST_ROAD = 25;
+CLOTHINGCOST_ROAD = 12.5;
+BAITBOXCOST_ROAD = 2.5;
+SPAREPARTCOST_ROAD = 12.5;
+FOODCOST_ROAD = 0.25;
 
 // Called when page loads
 
@@ -162,8 +169,22 @@ function inventory(){
   document.getElementById("wheelrow").innerHTML = "Wagon wheels " + inventory.wagonWheel;
   document.getElementById("axlerow").innerHTML = "Wagon axles " + inventory.wagonAxle;
   document.getElementById("tonguerow").innerHTML = "Wagon toungues " + inventory.wagonTongue;
-    document.getElementById("moneyLeft").style.display = "block";
+  document.getElementById("moneyLeft").style.display = "block";
   document.getElementById("moneyLeft").innerHTML = "Money left $" + currentGame.money.toFixed(2);
+}
+
+function roadStore(){
+  var currentGame = JSON.parse(localStorage.getItem('currentGame'));
+  selectionSet = ROADSTORESET
+
+  document.getElementById("oxenrow").innerHTML = "Oxen " + OXENCOST_ROAD + " per ox";
+  document.getElementById("foodrow").innerHTML = "Food " + FOODCOST_ROAD + " per pound"
+  document.getElementById("clothingrow").innerHTML = "Clothing " + CLOTHINGCOST_ROAD + " per set";
+  document.getElementById("baitrow").innerHTML = "Bait " + BAITBOXCOST_ROAD + " per bucket";
+  document.getElementById("wheelrow").innerHTML = "Wagon wheels " + SPAREPARTCOST_ROAD + " per wheel";
+  document.getElementById("axlerow").innerHTML = "Wagon axles " + SPAREPARTCOST_ROAD + " per axle";
+  document.getElementById("tonguerow").innerHTML = "Wagon toungues " + SPAREPARTCOST_ROAD + " per toungue";
+  document.getElementById("moneyAmount").innerHTML = "You have $" + currentGame.money.toFixed(2) + " to spend";
 }
 
 function purchase(amount){
@@ -474,7 +495,7 @@ function Items(){
   }
   this.getBill = function(){
     return this.oxen * OXENCOST + this.food * FOODCOST + this.clothing * CLOTHINGCOST +
-      this.bait * baitBOXCOST + this.getNumSpareParts() * SPAREPARTCOST;
+      this.bait * BAITBOXCOST + this.getNumSpareParts() * SPAREPARTCOST;
   }
 
 }
@@ -499,7 +520,7 @@ function storeOverview(){
   document.getElementById("oxenrow").innerHTML = "Oxen $" + (currentStore.oxen * OXENCOST).toFixed(2);
   document.getElementById("foodrow").innerHTML = "Food $" + (currentStore.food * FOODCOST).toFixed(2);
   document.getElementById("clothingrow").innerHTML = "Clothing $" + (currentStore.clothing * CLOTHINGCOST).toFixed(2);
-  document.getElementById("baitrow").innerHTML = "Bait $" + (currentStore.bait * baitBOXCOST).toFixed(2);
+  document.getElementById("baitrow").innerHTML = "Bait $" + (currentStore.bait * BAITBOXCOST).toFixed(2);
   document.getElementById("sparepartsrow").innerHTML = "Spare Parts $" + (currentStore.getNumSpareParts() * SPAREPARTCOST).toFixed(2);
   document.getElementById("currentMoney").innerHTML = "Amount you have: $" + currentGame.money.toFixed(2);
   document.getElementById("currentMoney").style.display = "block"; 
@@ -559,7 +580,6 @@ function storeOverview(){
           } else if(currentStore.getBill() > currentGame.money){
             notEnoughMoney();
           } else {
-            currentGame.money -= currentStore.getBill();
             storeOutro();
           }
           break;
@@ -568,6 +588,9 @@ function storeOverview(){
           break;
         case STOREOUTROSET:
           currentGame.inventory = currentStore
+          //matt sells oxen in pairs
+          currentGame.inventory.oxen *= 2;
+          currentGame.money = currentGame.money - currentStore.getBill();
           redirect("traveling.html",currentGame)
       }
 

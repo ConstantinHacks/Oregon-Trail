@@ -6,12 +6,11 @@
 		<title>The Oregon Trail</title>
 
 		<link rel="stylesheet" type="text/css" href="roadStore.css">
-
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 		<script type="text/javascript" src="driver.js"></script>
 	</head>
 
-	<body onload="init();">
+	<body onload="roadStore();">
 		<!-- <audio autoplay loop>
 				<source src="Country_Hymn.mp3" type="audio/mpeg">
 			</audio> -->
@@ -22,27 +21,20 @@
 				April 19, 1848
 			</div>
 			<div id="choices">
-				You may buy:
-				<br>
-				&emsp; 1. Oxen
-				<br>
-				&emsp; 2. Clothing
-				<br>
-				&emsp; 3. Fishing bait
-				<br>
-				&emsp; 4. Wagon wheels
-				<br>
-				&emsp; 5. Wagon axles
-				<br>
-				&emsp; 6. Wagon tongues
-				<br>
-				&emsp; 7. Food
-				<br>
-				&emsp; 8. Leave store
+				<ol id="list">
+					<li id=oxenrow></li>
+					<li id=foodrow></li>
+					<li id=clothingrow></li>
+					<li id=baitrow></li>
+					<li id=wheelrow></li>
+					<li id=axlerow></li>
+					<li id=tonguerow></li>
+					<li>Leave Store</li>
+				</ol>
 			</div>
-			<div id="moneyAmount">
+			<p id="moneyAmount">
 				You have $835.00 to spend.
-			</div>
+			</p>
 			<input type="text" id="userInput" placeholder="Which number?">
 		</div>
 		</div>
