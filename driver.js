@@ -16,7 +16,7 @@ STOREOUTROSET = 9;
 NOTENOUGHMONEYSET = 10;
 PARTYSELECTSET = 11;
 ROADSTORESET = 12;
-
+ROADSTORESETCONFIRM = 13;
 
 //Costs of items in dollars at Matt's Store
 OXENCOST = 40;
@@ -31,6 +31,12 @@ CLOTHINGCOST_ROAD = 12.5;
 BAITBOXCOST_ROAD = 2.5;
 SPAREPARTCOST_ROAD = 12.5;
 FOODCOST_ROAD = 0.25;
+
+MAXOXEN = 20;
+MAXCLOTHES = 99;
+MAXBAIT = 99
+MAXFOOD = 2000;
+MAXSPAREPARTS = 3;
 
 // Called when page loads
 
@@ -177,6 +183,9 @@ function roadStore(){
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
   selectionSet = ROADSTORESET
 
+  isBuying = false;
+
+  document.getElementById("itemBuying").style.display = "none";
   document.getElementById("oxenrow").innerHTML = "Oxen " + OXENCOST_ROAD + " per ox";
   document.getElementById("foodrow").innerHTML = "Food " + FOODCOST_ROAD + " per pound"
   document.getElementById("clothingrow").innerHTML = "Clothing " + CLOTHINGCOST_ROAD + " per set";
@@ -214,6 +223,92 @@ function purchase(amount){
       }  
      break;
   }
+}
+
+
+function purchaseFromRoad(amount){
+
+  var currentGame = JSON.parse(localStorage.getItem('currentGame'));
+
+
+  amount = parseInt(amount)
+
+  switch(itemForSale){
+    case 'oxen':
+      if(amount * OXENCOST_ROAD > currentGame.money){
+        alert("You can't afford that")
+      } else if(amount + currentGame.inventory.oxen > MAXOXEN){
+        alert("You can't have more than " + MAXOXEN + " oxen");
+      }else {
+        currentGame.money -= amount * OXENCOST_ROAD;
+        currentGame.inventory.oxen += amount;
+      }
+      break;
+    case 'pounds':
+      if(amount * FOODCOST_ROAD > currentGame.money){
+        alert("You can't afford that")
+      } else if(amount + currentGame.inventory.food > MAXFOOD){
+        alert("You can't have more than " + MAXFOOD + " pounds of food");
+      } else {
+        currentGame.money -= amount * FOODCOST_ROAD;
+        currentGame.inventory.food += amount;
+      }      
+      break;
+     case 'sets':
+      if(amount * CLOTHINGCOST_ROAD > currentGame.money){
+        alert("You can't afford that")
+      } else if(amount + currentGame.inventory.clothing > MAXCLOTHES){
+        alert("You can't have more than " + MAXCLOTHES + " sets of clothes");
+      } else {
+        currentGame.money -= amount * CLOTHINGCOST_ROAD;
+        currentGame.inventory.clothing += amount;
+      }     
+      break;
+      case 'buckets':
+      if(amount * BAITBOXCOST_ROAD > currentGame.money){
+        alert("You can't afford that")
+      } else if(amount + currentGame.inventory.bait > MAXBAIT){
+        alert("You can't have more than " + MAXBAIT + " buckets of bait");
+      } else {
+        currentGame.money -= amount * BAITBOXCOST_ROAD;
+        currentGame.inventory.bait += amount;
+      }
+     break;
+     case 'wheels':
+      if(amount * SPAREPARTCOST_ROAD > currentGame.money){
+        alert("You can't afford that")
+      } else if(amount + currentGame.inventory.wagonWheel > MAXSPAREPARTS){
+        alert("You can't have more than " + MAXSPAREPARTS + " of any type of spare part");
+      } else {
+        currentGame.money -= amount * SPAREPARTCOST_ROAD;
+        currentGame.inventory.wagonWheel += amount;
+      } 
+     break;
+    case 'axles':
+      if(amount * SPAREPARTCOST_ROAD > currentGame.money){
+        alert("You can't afford that")
+      } else if(amount + currentGame.inventory.wagonAxle > MAXSPAREPARTS){
+        alert("You can't have more than " + MAXSPAREPARTS + " of any type of spare part");
+      } else {
+        currentGame.money -= amount * SPAREPARTCOST_ROAD;
+        currentGame.inventory.wagonAxle += amount;
+      } 
+     break;
+    case 'tongues':
+      if(amount * SPAREPARTCOST_ROAD > currentGame.money){
+        alert("You can't afford that")
+      } else if(amount + currentGame.inventory.wagonTongue > MAXSPAREPARTS){
+        alert("You can't have more than " + MAXSPAREPARTS + " of any type of spare part");
+      } else {
+        currentGame.money -= amount * SPAREPARTCOST_ROAD;
+        currentGame.inventory.wagonTongue += amount;
+      } 
+     break;
+  }
+
+  console.log(currentGame.inventory);
+
+  roadStore();
 }
 
 function notEnoughMoney(){
@@ -277,8 +372,7 @@ function parseText(text)
     {
       console.log("selection didn't match");
     }
-  } else if (isBuying){
-
+  } else if (isBuying && selectionSet == STOREMAINMENU){
     console.log("Buying this much " + text)
     console.log("SP INDEX:" + sparePartIndex);
     var buyingSpareParts = sparePartIndex != 4
@@ -301,6 +395,9 @@ function parseText(text)
         storeOverview();
       }
     }
+  } else if( isBuying && selectionSet == ROADSTORESETCONFIRM){
+      console.log("Buying from road");
+      purchaseFromRoad(text);
   }
   // otherwise matches a value 1-6
   else {
@@ -322,6 +419,8 @@ function parseText(text)
           redirect('store.html',game);
         } else if(selectionSet == STOREMAINMENU){
           showItem("oxen");
+        } else if(selectionSet == ROADSTORESET){
+          showRoadItem("oxen");
         }
         else
         {
@@ -344,6 +443,9 @@ function parseText(text)
           redirect('store.html',game);
         } else if(selectionSet == STOREMAINMENU){
           showItem("food");
+        } else if(selectionSet == ROADSTORESET){
+          //food
+          showRoadItem("pounds");
         }
         else 
         {
@@ -366,6 +468,9 @@ function parseText(text)
           redirect('store.html',game);
         } else if(selectionSet == STOREMAINMENU){
           showItem("clothing");
+        } else if(selectionSet == ROADSTORESET){
+          //clothing
+          showRoadItem("sets");
         }
         else
         {
@@ -385,6 +490,9 @@ function parseText(text)
           redirect('store.html',game);
         } else if(selectionSet == STOREMAINMENU){
           showItem("bait");
+        } else if(selectionSet == ROADSTORESET){
+          //bait
+          showRoadItem("buckets");
         }
         else
         {
@@ -406,6 +514,8 @@ function parseText(text)
           sparePartIndex = 1
           showItem("spareparts");
           handleSpareParts()
+        } else if(selectionSet == ROADSTORESET){
+          showRoadItem("wheels");
         }
         else
         {
@@ -420,18 +530,36 @@ function parseText(text)
 
         }else if(selectionSet == CREATEGAMESET) {
           
+        }else if(selectionSet == ROADSTORESET){
+          showRoadItem("axles");
         }
         else
         {
           
         }
         break;
+      case '7':
+      if(selectionSet == ROADSTORESET){
+          showRoadItem("tongues");
+      } else {
+
+      }
+      break;
       default:
         //do stuff
         console.log("selection was invalid");
         break;
     }
   }
+
+}
+
+function showRoadItem(item){
+  isBuying = true;
+  itemForSale = item;
+  selectionSet = ROADSTORESETCONFIRM
+  document.getElementById("itemBuying").innerHTML = "How Many " + item + " ?";
+  document.getElementById("itemBuying").style.display = "block";
 
 }
 
@@ -574,7 +702,6 @@ function storeOverview(){
           storeOverview();
           break;
         case STOREMAINMENU:
-          
           if(currentStore.oxen == 0){
             alert("Remember you need oxen to pull your wagon!")
           } else if(currentStore.getBill() > currentGame.money){

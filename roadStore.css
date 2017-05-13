@@ -15,6 +15,7 @@ html {
 
 #choices {
 	position: absolute;
+	font-size: 22px;
 	right: 50%;
 	top: 20%;
 	color: white;
@@ -23,9 +24,17 @@ html {
 #moneyAmount {
 	position: absolute;
 	right: 50%;
-	top: 86%;
+	top: 50%;
 	color: white;
 }
+
+#itemBuying {
+	position: absolute;
+	right: 50%;
+	top: 60%;
+	color: white;
+}
+
 
 input:focus {
 	outline: none;
