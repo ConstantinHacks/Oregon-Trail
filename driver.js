@@ -119,7 +119,7 @@ $(document).keypress(function(key) {
   }
 });
 
-
+//Bootstrap Matt's store
 function store(){
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
   currentStore = new Items();
@@ -129,6 +129,7 @@ function store(){
   selectionSet = STOREINTRO1
 }
 
+//Add Party Members to game object
 function addPartyMembers(partyMembers){
 
   var travelers = [];
@@ -148,13 +149,13 @@ function addPartyMembers(partyMembers){
   //pick month departure date
   redirect('pickMonth.html',currentGame)
 }
-
+// user picks which month to depart
 function chooseMonth(){
-
   game = JSON.parse(localStorage.getItem('currentGame'));
   selectionSet = PICKMONTHSET; 
 }
 
+//called when the user is trading or looking at their inventory
 function inventory(){
 
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
@@ -178,7 +179,7 @@ function inventory(){
   document.getElementById("moneyLeft").style.display = "block";
   document.getElementById("moneyLeft").innerHTML = "Money left $" + currentGame.money.toFixed(2);
 }
-
+//bootstrap the store when along the road
 function roadStore(){
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
   selectionSet = ROADSTORESET
@@ -196,10 +197,11 @@ function roadStore(){
   document.getElementById("moneyAmount").innerHTML = "You have $" + currentGame.money.toFixed(2) + " to spend";
 }
 
+//prepare to purchase from matt's store
 function purchase(amount){
 
   amount = parseInt(amount)
-
+  //add the selected item and amount 
   switch(itemForSale){
     case 'oxen':
       currentStore.oxen = amount;
@@ -225,11 +227,10 @@ function purchase(amount){
   }
 }
 
-
+//prepare to purchase from a store on the road
 function purchaseFromRoad(amount){
 
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
-
 
   amount = parseInt(amount)
 
@@ -310,7 +311,7 @@ function purchaseFromRoad(amount){
 
   roadStore();
 }
-
+//called when the user leaves matt store with too large a bill 
 function notEnoughMoney(){
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
 
@@ -324,6 +325,7 @@ function notEnoughMoney(){
   document.getElementById("resultText").innerHTML = "Okay, that comes out to a total of $" + currentStore.getBill() + ". But I see that you only have $" +currentGame.money + " We'd better go over that list again."
 }
 
+//user successfully checks out matt's store
 function storeOutro(){
  selectionSet = STOREOUTROSET
   document.getElementById("userInput").placeholder = "Press SPACE BAR to continue"
@@ -334,7 +336,7 @@ function storeOutro(){
   document.getElementById("resultText").innerHTML = "Well then, you're ready to start. Good luck! You have a long and difficult journey ahead of you."
 }
 
-
+//function handling a user buying multiple parts from
 function handleSpareParts(){
   var part;
 
@@ -354,7 +356,7 @@ function handleSpareParts(){
   document.getElementById("sparePartSale").innerHTML = "wagon " +part+ " -$10 each";
   document.getElementById("userInput").placeholder = "Enter your purchase amount for wagon " + part + "s"
 }
-
+//handles all text input
 function parseText(text)
 {
   // if it is a yes no question, parse differently
@@ -608,7 +610,7 @@ function redirect(path,gameState){
   localStorage.setItem('currentGame', JSON.stringify(gameState));
   $(location).attr('href', path)
 }
-
+//defines item class used in stores and inventories
 function Items(){
   this.oxen = 0;
   this.food = 0;
