@@ -57,6 +57,10 @@ function Game(occupation,money,selectionSet){
    this.occupation = occupation;
    this.money = money;
    this.selectionSet = selectionSet;
+   this.nextDistance = 102;
+   this.totalDistance = 0;
+   this.pace = 2;
+   this.ration = 2;
    //rest of the attributes added as they are entered.
 }
 //Traveler Class
@@ -181,7 +185,7 @@ function purchase(amount){
   //add the selected item and amount 
   switch(itemForSale){
     case 'oxen':
-      currentStore.oxen = amount;
+      currentStore.oxen = amount*2;
       break;
     case 'food':
       currentStore.food = amount;

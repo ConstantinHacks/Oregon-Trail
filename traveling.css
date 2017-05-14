@@ -8,11 +8,12 @@ body {
 
 #traveling {
 	height: 50%;
-	margin-bottom: 20px;
+	align-item: center;
+	overflow: hidden;
 }
 
-#travelingGif {
-	width: 70%;
+#travel{
+	align-self: center;
 }
 
 #userStats {
@@ -20,10 +21,18 @@ body {
 	height: 40%;
 	text-align: center;
 	font-size: 25px;
+	top: 50%;
 }
 
 #userDirections {
 	font-size: 25px;
 	color: white;
 	text-align: center;
+}
+
+#landmark
+{
+	position: absolute;
+	left: -12%;
+	top: 175px;
 }

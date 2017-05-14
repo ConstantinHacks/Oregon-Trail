@@ -1,37 +1,42 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset=utf-8 />
+  <head>
+    <meta charset=utf-8 />
 
-		<title>The Oregon Trail</title>
+    <title>The Oregon Trail</title>
 
-		<link rel="stylesheet" type="text/css" href="traveling.css">
-	</head>
+    <link rel="stylesheet" type="text/css" href="traveling.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script type="text/javascript" src="driver.js"></script>
+    <script type="text/javascript" src="traveling.js"></script>
+  </head>
 
-	<body>
-		<audio autoplay loop>
-				<source src="Country_Hymn.mp3" type="audio/mpeg">
-			</audio>
-		<div id="wrapper">
-			<div id="traveling">
-				<center><img src="traveling.png" id=travelingGif></center>
-			</div>
+  <body>
+    <audio autoplay loop>
+        <source src="Country_Hymn" type="audio/mpeg">
+      </audio>
+    <div id="wrapper">
+      <img id="landmark" src="river.png">
+      <div id="traveling">
+        <img src="traveling.png" id="travel">
+      </div>
 
-			<div id="userStats">
-				<b>Date:</b> Month, Day, Year
-				<br>
-				<b>Weather:</b> warm/cool/hot/cold/rainy/etc
-				<br>
-				<b>Health:</b> good/fair/poor
-				<br>
-				<b>Food:</b> # pounds
-				<br>
-				<b>Next landmark:</b> # miles
-				<br>
-				<b>Miles traveled:</b> # miles
-			</div>
 
-			<div id="userDirections"> <i>Press <b>SPACE BAR</b> to continue.</i> </div>
-		</div>
-	</body>
+      <div id="userStats">
+        <b>Date: </b><span id="date"></span>
+        <br>
+        <b>Weather: </b><span id="weather">warm/cool/hot/cold/rainy/etc</span>
+        <br>
+        <b>Health: </b> <span id="health">good/fair/poor</span>
+        <br>
+        <b>Food: </b> <span id="food"># pounds</span>
+        <br>
+        <b>Next landmark: </b><span id="next"># miles</span>
+        <br>
+        <b>Miles traveled: </b><span id="total"># miles</span>
+      </div>
+
+      <div id="userDirections"> <i>Press <b>SPACE BAR</b> to continue.</i> </div>
+    </div>
+  </body>
 </html>
