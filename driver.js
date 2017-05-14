@@ -66,29 +66,6 @@ function Traveler(name){
    this.illness = "none"
 }
 
-
-// Start Trail Information (LearnAboutTheTrail.html)
-/*function docReady() {
-	var divs = $('div[id^="content-"]').hide();
-	i = 0;
-	$(document).ready(function(){
-    $('userInput').focus();
-		$(document).keypress(function (e) {
-  			if (e.keyCode === 0 || e.keyCode === 32) {
-  				e.preventDefault();
-  				nextPage(divs,i);
-        	}
-        });
-	});*/
-
-/*function nextPage() { 
-    divs.eq(i).fadeIn(400)
-              .delay(5000)
-              .fadeOut(400, nextPage(divs,i));
-
-    i = ++i % divs.length; // increment i, 
-                           //   and reset to 0 when it equals divs.length
-};*/
 $(document).ready(function(){
   $('#userInput').focus();
   $('#userInput').focusout(function(){console.log("unfocus"); $('#userInput').focus();});
@@ -658,6 +635,7 @@ function storeOverview(){
   document.getElementById("storeHeader").style.display = "block"
   document.getElementById("userInput").placeholder = "Which item would you like to buy?"
   document.getElementById("userInput").disabled = false
+  document.getElementById("userInput").focus(); // added by Kwame (removes the placeholder but autofocuses)
   document.getElementById("currentBillDiv").style.display = "block"
   document.getElementById("currentBill").innerHTML = "Total Bill: $" + currentStore.getBill().toFixed(2);
   document.getElementById("currentMoney").style.display = "block"
@@ -673,11 +651,6 @@ function storeOverview(){
 
 
 }
-
-// How to call this function only when above userInput is 2?
-// function optionTwo() {
-// 	switchPage("choiceBox", "trailInfoPageOne");
-// 	switchPage("userInput", "userDirections");
 
 	$(document).keypress(function (e) {
 	  if (e.keyCode === 32) {

@@ -67,3 +67,10 @@ input:focus {
 #content-2 {
 	display: none;
 }
+
+.partyTeam {
+	font-size: 35px;
+	background-color: black;
+	color: white;
+	border: none;
+}
