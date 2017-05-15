@@ -17,6 +17,7 @@ NOTENOUGHMONEYSET = 10;
 PARTYSELECTSET = 11;
 ROADSTORESET = 12;
 ROADSTORESETCONFIRM = 13;
+STATUSSET = 14;
 
 //Costs of items in dollars at Matt's Store
 OXENCOST = 40;
@@ -52,6 +53,14 @@ var itemForSale;
 
 var sparePartIndex = 4;
 
+var monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+var paceNames = ["Steady", "Strenous", "Grueling"];
+
+var rationNames = ["Filling","Meager","Bare Bones"];
+
 //Game Class
 function Game(occupation,money,selectionSet){
    this.occupation = occupation;
@@ -61,14 +70,41 @@ function Game(occupation,money,selectionSet){
    this.totalDistance = 0;
    this.pace = 2;
    this.ration = 2;
+   this.currentTown = "Independence"
+   this.weather = "cool"
    //rest of the attributes added as they are entered.
 }
+
+function getDateString(game){
+  currentTime = new Date(game.date);
+  return monthNames[currentTime.getMonth()] + " " +currentTime.getDate() + ", " + currentTime.getFullYear();
+}
+
 //Traveler Class
 function Traveler(name){
    this.name = name
    this.health = GOOD_HEALTH
    this.illness = "none"
 }
+
+function getHealthString(game){
+  totalHealth = 0;
+  for(var i=0;i<5;i++){
+    totalHealth += game.party[i].health;
+  }
+  avgHealth = totalHealth/5;
+
+  if (avgHealth > FAIR_HEALTH){
+    return "Good"
+  } else if(avgHealth > POOR_HEALTH){
+    return "Fair"
+  } else if(avgHealth > VERY_POOR_HEALTH){
+    return "Poor"
+  } else {
+    return "Very Poor"
+  }
+}
+
 
 $(document).ready(function(){
   $('#userInput').focus();
@@ -340,6 +376,7 @@ function handleSpareParts(){
 //handles all text input
 function parseText(text)
 {
+  var currentGame = JSON.parse(localStorage.getItem('currentGame'));
   // if it is a yes no question, parse differently
   if(yesNoQ)
   {
@@ -404,6 +441,8 @@ function parseText(text)
           showItem("oxen");
         } else if(selectionSet == ROADSTORESET){
           showRoadItem("oxen");
+        } else if(selectionSet == STATUSSET){
+          redirect('traveling.html',currentGame);
         }
         else
         {
@@ -429,6 +468,8 @@ function parseText(text)
         } else if(selectionSet == ROADSTORESET){
           //food
           showRoadItem("pounds");
+        } else if(selectionSet == STATUSSET){
+          redirect(inventory.html,currentGame)
         }
         else 
         {
@@ -454,6 +495,8 @@ function parseText(text)
         } else if(selectionSet == ROADSTORESET){
           //clothing
           showRoadItem("sets");
+        } else if(selectionSet == STATUSSET){
+          redirect('map.html',currentGame);
         }
         else
         {
@@ -476,6 +519,8 @@ function parseText(text)
         } else if(selectionSet == ROADSTORESET){
           //bait
           showRoadItem("buckets");
+        } else if(selectionSet == STATUSSET){
+          //TODO change pace
         }
         else
         {
@@ -499,6 +544,8 @@ function parseText(text)
           handleSpareParts()
         } else if(selectionSet == ROADSTORESET){
           showRoadItem("wheels");
+        } else if(selectionSet == STATUSSET){
+          //TODO change ration
         }
         else
         {
@@ -515,6 +562,8 @@ function parseText(text)
           
         }else if(selectionSet == ROADSTORESET){
           showRoadItem("axles");
+        } else if(selectionSet == STATUSSET){
+          //TODO rest
         }
         else
         {
@@ -524,8 +573,20 @@ function parseText(text)
       case '7':
       if(selectionSet == ROADSTORESET){
           showRoadItem("tongues");
-      } else {
+      } else if(selectionSet == STATUSSET){
+        redirect("inventory.html",currentGame);
+      }else {
 
+      }
+      break;
+      case '8':
+      if(selectionSet == STATUSSET){
+        //TODO Talk
+      }
+      break;
+      case '9':
+      if(selectionSet == STATUSSET){
+        redirect("roadStore.html",currentGame);
       }
       break;
       default:
@@ -535,6 +596,18 @@ function parseText(text)
     }
   }
 
+}
+
+function status(){
+    var currentGame = JSON.parse(localStorage.getItem('currentGame'));
+    selectionSet = STATUSSET;
+    console.log(currentGame);
+    document.getElementById("date").innerHTML = getDateString(currentGame);
+    document.getElementById("town").innerHTML = currentGame.currentTown;
+    document.getElementById("weather").innerHTML = "Weather: " +currentGame.weather;
+    document.getElementById("health").innerHTML = "Health: "+ getHealthString(currentGame);
+    document.getElementById("pace").innerHTML = "Pace: "+paceNames[currentGame.pace]
+    document.getElementById("rations").innerHTML = "Rations: " +rationNames[currentGame.ration];
 }
 
 function showRoadItem(item){
