@@ -678,7 +678,7 @@ function Items(){
     return this.wagonTongue+this.wagonAxle+this.wagonWheel;
   }
   this.getBill = function(){
-    return this.oxen * OXENCOST + this.food * FOODCOST + this.clothing * CLOTHINGCOST +
+    return this.oxen/2 * OXENCOST + this.food * FOODCOST + this.clothing * CLOTHINGCOST +
       this.bait * BAITBOXCOST + this.getNumSpareParts() * SPAREPARTCOST;
   }
 
