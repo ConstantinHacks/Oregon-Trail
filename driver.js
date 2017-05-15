@@ -61,7 +61,7 @@ var paceNames = ["Steady", "Strenous", "Grueling"];
 
 var rationNames = ["Filling","Meager","Bare Bones"];
 
-//Game Class
+//Game Class initializes a new Game
 function Game(occupation,money,selectionSet){
    this.occupation = occupation;
    this.money = money;
@@ -75,25 +75,30 @@ function Game(occupation,money,selectionSet){
    //rest of the attributes added as they are entered.
 }
 
+//getDateString gets the in-game date and formats it appropriately for output
 function getDateString(game){
   currentTime = new Date(game.date);
   return monthNames[currentTime.getMonth()] + " " +currentTime.getDate() + ", " + currentTime.getFullYear();
 }
 
-//Traveler Class
+//Traveler Class initializes new travelers
 function Traveler(name){
    this.name = name
    this.health = GOOD_HEALTH
    this.illness = "none"
 }
 
+//getHealthString determines the average health of the party and then returns the appropriate response
 function getHealthString(game){
   totalHealth = 0;
-  for(var i=0;i<5;i++){
+  //get the total health of the party
+  for(var i=0;i<game.party.length;i++){
     totalHealth += game.party[i].health;
   }
-  avgHealth = totalHealth/5;
+  //divides the total health by the number of remaining party members
+  avgHealth = totalHealth/game.party.length;
 
+  //determines and returns the appropriate response
   if (avgHealth > FAIR_HEALTH){
     return "Good"
   } else if(avgHealth > POOR_HEALTH){
@@ -114,23 +119,31 @@ $(document).ready(function(){
 console.log("here");
 
 // End Trail Information (LearnAboutTheTrail.html)
+//set info for the opening menu
 function init() {
   selectionSet = MENUSET;
   yesNoQ = 0;
 }
 
+//set info for when a player begins the game
 function createGame() {
   selectionSet = CREATEGAMESET;
   yesNoQ = 0;
 }
 
+//looks for keypresses
 $(document).keypress(function(key) {
+  //if we are looking for a user response
   if(selectionSet)
   {
+	//if the user presses the enter key
     if(key.which == 13) {
+	  //gets the input value
       var userInput = document.getElementById("userInput").value;
+	  //parses the input
       parseText(userInput);
       // alert("selection was " + userInput);
+	  //sets the input back to empty
       document.getElementById("userInput").value = ""; // resets input
     } 
   }
@@ -138,7 +151,9 @@ $(document).keypress(function(key) {
 
 //Bootstrap Matt's store
 function store(){
+  //retrieves the current game
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
+  //initializes the store
   currentStore = new Items();
   document.getElementById("textBox").innerHTML = "Before leaving Independence you should buy equipment and supplies, you have "+ currentGame.money +" in cash, but don't have to spend it all now."
   document.getElementById("userInput").placeholder = "Press SPACE BAR to continue"
@@ -147,10 +162,10 @@ function store(){
 }
 
 //Add Party Members to game object
-function addPartyMembers(partyMembers){
+function addPartyMembers(){
 
   var travelers = [];
-
+  //creates travelers using the input names and then adds it to the traveler array
   travelers.push(new Traveler( $('#leaderName').val() ))
   travelers.push(new Traveler( $('#member2').val() ))
   travelers.push(new Traveler( $('#member3').val() ))
@@ -158,14 +173,15 @@ function addPartyMembers(partyMembers){
   travelers.push(new Traveler( $('#member5').val() ))
 
   console.log(travelers);
-
+  //gets the current game info
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
-
+  //sets the party of the current game equal to the new travelers
   currentGame.party = travelers;
 
   //pick month departure date
   redirect('pickMonth.html',currentGame)
 }
+
 // user picks which month to depart
 function chooseMonth(){
   game = JSON.parse(localStorage.getItem('currentGame'));
@@ -175,7 +191,9 @@ function chooseMonth(){
 //called when the user is trading or looking at their inventory
 function inventory(){
 
+  //loads the current game info
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
+  //gets the player's inventory
   var inventory = currentGame.inventory;
 
   // TODO find our if we're trading or just viewing inventory.
@@ -196,6 +214,7 @@ function inventory(){
   document.getElementById("moneyLeft").style.display = "block";
   document.getElementById("moneyLeft").innerHTML = "Money left $" + currentGame.money.toFixed(2);
 }
+
 //bootstrap the store when along the road
 function roadStore(){
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
