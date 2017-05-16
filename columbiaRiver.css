@@ -1,0 +1,27 @@
+html {
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+body {
+	background-color: black;
+}
+
+#gameStage {
+	background-color: blue;
+	width: 55%;
+	height: 100vh;
+	color: white;
+	margin: 0 auto;
+	position: relative;
+}
+
+#wagon {
+	position: absolute;
+	top: 3%;
+	right: 25%;
+}
+
+.riverRocks {
+	position: absolute;
+}
