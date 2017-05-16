@@ -279,8 +279,8 @@ function inventory(){
         }
         while(offeredItem == supplyIndex);
 
-        //high quantity items like clothing, bait or food
-        if(offeredItem >= 1 && offeredItem <= 3){
+        //high quantity items like bait or food
+        if(offeredItem == 1 || offeredItem == 3){
           amountOffered = getRandomNumber(250);
         } else {
           amountOffered = getRandomNumber(2) + 1;
