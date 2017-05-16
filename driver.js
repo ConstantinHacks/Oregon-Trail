@@ -666,6 +666,11 @@ function parseText(text)
         } else if(selectionSet == ROADSTORESET){
           showRoadItem("oxen");
         } else if(selectionSet == STATUSSET){
+          if(currentGame.landmarks[0].detail == "river")
+          {
+            currentGame.landmarks.splice(0,1);
+            redirect('riverCrossing.html',currentGame)
+          }
           redirect('traveling.html',currentGame);
         }
         else

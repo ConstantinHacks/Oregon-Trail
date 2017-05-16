@@ -15,7 +15,7 @@ $(document).ready(function(){
     if(key.which == 32)
     {
       // if the landmark is a river, splicing is taken care of at river crossing
-      if(game.landmarks[0].detail != "")//river")
+      if(game.landmarks[0].detail != "river")
       {
         //removes first element of landmarks to indicate moving on to next landmark
         game.landmarks.splice(0,1);
