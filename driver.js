@@ -68,6 +68,7 @@ var paceNames = ["Steady", "Strenous", "Grueling"];
 
 var rationNames = ["Filling","Meager","Bare Bones"];
 
+//creates a Trade object
 function Trade(requestedItem,requestAmount,offeredItem,offeredAmount){
   this.requestedItem = requestedItem;
   this.requestAmount = requestAmount;
@@ -75,7 +76,7 @@ function Trade(requestedItem,requestAmount,offeredItem,offeredAmount){
   this.offeredAmount = offeredAmount;
 }
 
-var currentTrade;
+var currentTrade; //stores the trade object currently being offered
 
 //Game Class initializes a new Game
 function Game(occupation,money,selectionSet){
@@ -97,7 +98,7 @@ function getDateString(game){
   return monthNames[currentTime.getMonth()] + " " +currentTime.getDate() + ", " + currentTime.getFullYear();
 }
 
-//Traveler Class initializes new travelers
+//Traveler Class initializes new travelers with name, at full health and without illness
 function Traveler(name){
    this.name = name
    this.health = GOOD_HEALTH
@@ -204,6 +205,7 @@ function chooseMonth(){
   selectionSet = PICKMONTHSET; 
 }
 
+//returns a random number between 0 and maximumNum - 1
 function getRandomNumber(maximumNum){
   return Math.floor(Math.random() * maximumNum); 
 }
@@ -216,10 +218,10 @@ function inventory(){
   //gets the player's inventory
   var inventory = currentGame.inventory;
 
-  // TODO find our if we're trading or just viewing inventory.
-
+  //if trading
   if(currentGame.selectionSet == TRADESET){
   console.log("Trade")
+  //set what item a trader would be looking for
   var supplyIndex = getRandomNumber(supplies.length);
   var amountRequested;
 
@@ -229,11 +231,13 @@ function inventory(){
 
     //high quantity items like bait or food
     if(supplyIndex == 1 || supplyIndex == 3){
+	  //set trader request amount to be between 1 and 250
       amountRequested = getRandomNumber(250) + 1; 
     } else {
+	  //set trader request amount to be either 1 or 2
       amountRequested = getRandomNumber(2) + 1;
     }
-
+  //check if the player has enough of the requested item to trade with the trader
   switch(supplyIndex+1){
     case 1:
         canTrade = currentGame.inventory.oxen > amountRequested 
@@ -260,20 +264,21 @@ function inventory(){
       console.log("ERROR!")
       break;
     }
-
+      //if the player is unable to trade (ie. does not have enough of the requested item) display info telling the player 
       if(!canTrade){
         document.getElementById("request").innerHTML = "You meet another emigrant who wants " + amountRequested + " " + supplies[supplyIndex];
         document.getElementById("requestResult").innerHTML = "You do not have this";
         selectionSet = CANTTRADESET;
         document.getElementById("userDirections").style.display = "block";
 
-      } else {
+      } else { //if they are able to trade
 
         document.getElementById("userInput").style.display = "block";
 
         var offeredItem;
         var amountOffered;
-
+		
+		//determine what item the trader will offer, ensuring that it isn't the same item as what they are requesting
         do{
           offeredItem = getRandomNumber(supplies.length);
         }
@@ -281,25 +286,27 @@ function inventory(){
 
         //high quantity items like bait or food
         if(offeredItem == 1 || offeredItem == 3){
-          amountOffered = getRandomNumber(250);
+		  //set amount offered to be between 1 and 250
+          amountOffered = getRandomNumber(250) + 1;
         } else {
+		  //set amount offered to be either 1 or 2
           amountOffered = getRandomNumber(2) + 1;
         }
-        
+        //display the request to the player and ask if they are willing to trade
         document.getElementById("request").innerHTML = "You meet another emigrant who wants " + amountRequested + " " + supplies[supplyIndex] +". He will trade you "+ amountOffered + " " + supplies[offeredItem];
         document.getElementById("requestResult").innerHTML = "Are you willing to trade?"
-        
+        //create the trade and check for the player's answer
         yesNoQ = true;
         selectionSet = ACCEPTTRADESET;
         currentTrade = new Trade(supplyIndex,amountRequested,offeredItem,amountOffered);
       }
 
-  } else if(currentGame.selectionSet == VIEWINVENTORYSET){
+  } else if(currentGame.selectionSet == VIEWINVENTORYSET){ //if viewing the inventory, display how much money the player has
     console.log("View Supplies");
     document.getElementById("moneyLeft").style.display = "block";
     document.getElementById("moneyLeft").innerHTML = "Money left $" + currentGame.money.toFixed(2);
   } 
-
+  //display everything in the player's inventory
   document.getElementById("oxenrow").innerHTML = "Oxen " + inventory.oxen;
   document.getElementById("foodrow").innerHTML = "Food " + inventory.food;
   document.getElementById("clothingrow").innerHTML = "Clothing " + inventory.clothing;
@@ -316,7 +323,7 @@ function roadStore(){
   selectionSet = ROADSTORESET
 
   isBuying = false;
-
+  //display the road store info
   document.getElementById("itemBuying").style.display = "none";
   document.getElementById("oxenrow").innerHTML = "Oxen " + OXENCOST_ROAD + " per ox";
   document.getElementById("foodrow").innerHTML = "Food " + FOODCOST_ROAD + " per pound"
@@ -332,7 +339,7 @@ function roadStore(){
 function purchase(amount){
 
   amount = parseInt(amount)
-  //add the selected item and amount 
+  //add the selected item and amount to the store
   switch(itemForSale){
     case 'oxen':
       currentStore.oxen = amount*2;
@@ -365,6 +372,7 @@ function purchaseFromRoad(amount){
 
   amount = parseInt(amount)
 
+  //check if the player can afford what they want and that they will not exceed the max carry amount of an item
   switch(itemForSale){
     case 'oxen':
       if(amount * OXENCOST_ROAD > currentGame.money){
@@ -443,6 +451,7 @@ function purchaseFromRoad(amount){
   roadStore();
 }
 //called when the user leaves matt store with too large a bill 
+//displays an output telling the player that they cannot afford everything
 function notEnoughMoney(){
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
 
@@ -457,6 +466,7 @@ function notEnoughMoney(){
 }
 
 //user successfully checks out matt's store
+//displays an output sending the player off on their journey
 function storeOutro(){
  selectionSet = STOREOUTROSET
   document.getElementById("userInput").placeholder = "Press SPACE BAR to continue"
@@ -467,10 +477,10 @@ function storeOutro(){
   document.getElementById("resultText").innerHTML = "Well then, you're ready to start. Good luck! You have a long and difficult journey ahead of you."
 }
 
-//function handling a user buying multiple parts from
+//function handling a user buying multiple parts
 function handleSpareParts(){
   var part;
-
+  //determines which part is being bought
   switch(sparePartIndex){
     case 1:
     part = "wheel"
@@ -482,17 +492,18 @@ function handleSpareParts(){
     part = "tongue"
     break;
   }
-
+  //displays the correct part for purchase
   document.getElementById("sparePartSale").style.display = "block";
   document.getElementById("sparePartSale").innerHTML = "wagon " +part+ " -$10 each";
   document.getElementById("userInput").placeholder = "Enter your purchase amount for wagon " + part + "s"
 }
 
+//handles an accepted trade by adjusting the player's inventory appropriately
 function acceptTrade(trade){
   var currentGame = JSON.parse(localStorage.getItem('currentGame'));
 
     console.log("Before Trade: " + JSON.stringify(currentGame.inventory));
-
+	//remove the requested amount of the requested item from the player's inventory
     switch(trade.requestedItem + 1){
       case 1:
         currentGame.inventory.oxen -= trade.requestAmount;
@@ -519,7 +530,7 @@ function acceptTrade(trade){
       console.log("ERROR!")
       break;
     }
-
+	//add the amount of the offered item to the player's inventory
     switch(trade.offeredItem + 1){
       case 1:
         currentGame.inventory.oxen += trade.offeredAmount;
@@ -548,6 +559,7 @@ function acceptTrade(trade){
     }
 
     console.log("After Trade: " + JSON.stringify(currentGame.inventory));
+	//return to main status page
     redirect("status.html",currentGame);
 }
 
@@ -558,18 +570,21 @@ function parseText(text)
   // if it is a yes no question, parse differently
   if(yesNoQ)
   {
+	//if the response begins with 'y', treat as a yes
     if(text.match(/^y/))
     {
       console.log("selection was yes");
+	  //accept the trade
       switch(selectionSet){
         case ACCEPTTRADESET:
           acceptTrade(currentTrade);
           break;
       }
     }
-    else if (text.match(/^n/))
+    else if (text.match(/^n/)) //if the response begins with 'n', treat as a no
     {
       console.log("selection was no");
+	  //return to the main status page
       switch(selectionSet){
         case ACCEPTTRADESET:
           redirect("status.html",currentGame);
