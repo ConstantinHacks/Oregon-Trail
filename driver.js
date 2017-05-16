@@ -68,24 +68,24 @@ var paceNames = ["Steady", "Strenous", "Grueling"];
 
 var rationNames = ["Filling","Meager","Bare Bones"];
 
-var landmarks = [{name: "Independence", type: "fort", distance: 0, multiplier: 0, branch: false},
-                 {name: "Kansas River", type: "river", distance: 102, multiplier: 0, branch: false},
-                 {name: "Big Blue River", type: "river", distance: 83, multiplier: 0, branch: false},
-                 {name: "Fort Kearney", type: "fort", distance: 119, multiplier: 1, branch: false},
-                 {name: "Chimney Rock", type: "rock", distance: 250, multiplier: 0, branch: false},
-                 {name: "Fort Laramie", type: "fort", distance: 86, multiplier: 2, branch: false},
-                 {name: "Independence Rock", type: "rock", distance: 190, multiplier: 0, branch: false},
-                 {name: "South Pass", type: "pass", distance: 102, multiplier: 0, branch: true},
-                 {name: "Green River", type: "river", distance: 57, multiplier: 0, branch: false},
-                 {name: "Fort Bridger", type: "fort", distance: 125, multiplier: 3, branch: false},
-                 {name: "Soda Springs", type: "springs", distance: 144, multiplier: 0, branch: false},
-                 {name: "Fort Hall", type: "fort", distance: 57, multiplier: 4, branch: false},
-                 {name: "Snake River", type: "river", distance: 182, multiplier: 0, branch: false},
-                 {name: "Fort Boise", type: "fort", distance: 114, multiplier: 5, branch: false},
-                 {name: "Blue Mountains", type: "rock", distance: 160, multiplier: 0, branch: true},
-                 {name: "Fort Walla Walla", type: "fort", distance: 55, multiplier: 6, branch: false},
-                 {name: "The Dalles", type: "river", distance: 120, multiplier: 0, branch: true},
-                 {name: "Willamette Valley", type: "valley", distance:100, multiplier:0, branch: false}
+var landmarks = [{name: "Independence", detail: "fort", distance: 0, multiplier: 0, branch: false},
+                 {name: "Kansas River", detail: "river", distance: 102, multiplier: 0, branch: false},
+                 {name: "Big Blue River", detail: "river", distance: 83, multiplier: 0, branch: false},
+                 {name: "Fort Kearney", detail: "fort", distance: 119, multiplier: 1, branch: false},
+                 {name: "Chimney Rock", detail: "rock", distance: 250, multiplier: 0, branch: false},
+                 {name: "Fort Laramie", detail: "fort", distance: 86, multiplier: 2, branch: false},
+                 {name: "Independence Rock", detail: "rock", distance: 190, multiplier: 0, branch: false},
+                 {name: "South Pass", detail: "pass", distance: 102, multiplier: 0, branch: true},
+                 {name: "Green River", detail: "river", distance: 57, multiplier: 0, branch: false},
+                 {name: "Fort Bridger", detail: "fort", distance: 125, multiplier: 3, branch: false},
+                 {name: "Soda Springs", detail: "springs", distance: 144, multiplier: 0, branch: false},
+                 {name: "Fort Hall", detail: "fort", distance: 57, multiplier: 4, branch: false},
+                 {name: "Snake River", detail: "river", distance: 182, multiplier: 0, branch: false},
+                 {name: "Fort Boise", detail: "fort", distance: 114, multiplier: 5, branch: false},
+                 {name: "Blue Mountains", detail: "rock", distance: 160, multiplier: 0, branch: true},
+                 {name: "Fort Walla Walla", detail: "fort", distance: 55, multiplier: 6, branch: false},
+                 {name: "The Dalles", detail: "river", distance: 120, multiplier: 0, branch: true},
+                 {name: "Willamette Valley", detail: "valley", distance:100, multiplier:0, branch: false}
                 ]
 
 //creates a Trade object
@@ -996,7 +996,7 @@ function storeOverview(){
           //matt sells oxen in pairs
           currentGame.inventory.oxen *= 2;
           currentGame.money = currentGame.money - currentStore.getBill();
-          redirect("traveling.html",currentGame);
+          redirect("landmark.html",currentGame);
           break;
         case CANTTRADESET:
           redirect("status.html",currentGame);
