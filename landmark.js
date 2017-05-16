@@ -12,7 +12,7 @@ $(document).ready(function(){
   $("#date").html(monthNames[game.date.getMonth()]+" "+game.date.getDate()+", "+game.date.getFullYear()); 
   $(document).keypress(function(key){
     if(key.which == 32)
-      redirect("satus.html",game);
+      redirect("status.html",game);
   });
 });
 
