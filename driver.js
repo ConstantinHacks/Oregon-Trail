@@ -18,6 +18,10 @@ PARTYSELECTSET = 11;
 ROADSTORESET = 12;
 ROADSTORESETCONFIRM = 13;
 STATUSSET = 14;
+VIEWINVENTORYSET = 15;
+TRADESET = 16;
+ACCEPTTRADESET = 17;
+CANTTRADESET = 18;
 
 //Costs of items in dollars at Matt's Store
 OXENCOST = 40;
@@ -44,7 +48,8 @@ MAXSPAREPARTS = 3;
 // global variables to determine what answers the system should expect from the user
 var selectionSet;
 // looking for a yes/no question
-var yesNoQ;
+var yesNoQ = false;
+
 var isBuying;
 var maxInput;
 var game;
@@ -57,9 +62,20 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
+var supplies = ["Oxen","Pounds of Food","Sets of Clothing", "Buckets of bait","Wagon Wheels","Wagon Axles","Wagon Tongues"];
+
 var paceNames = ["Steady", "Strenous", "Grueling"];
 
 var rationNames = ["Filling","Meager","Bare Bones"];
+
+function Trade(requestedItem,requestAmount,offeredItem,offeredAmount){
+  this.requestedItem = requestedItem;
+  this.requestAmount = requestAmount;
+  this.offeredItem = offeredItem;
+  this.offeredAmount = offeredAmount;
+}
+
+var currentTrade;
 
 //Game Class
 function Game(occupation,money,selectionSet){
@@ -172,6 +188,10 @@ function chooseMonth(){
   selectionSet = PICKMONTHSET; 
 }
 
+function getRandomNumber(maximumNum){
+  return Math.floor(Math.random() * maximumNum); 
+}
+
 //called when the user is trading or looking at their inventory
 function inventory(){
 
@@ -180,11 +200,87 @@ function inventory(){
 
   // TODO find our if we're trading or just viewing inventory.
 
-  // if(selectionSet == TRADESET){
+  if(currentGame.selectionSet == TRADESET){
+  console.log("Trade")
+  var supplyIndex = getRandomNumber(supplies.length);
+  var amountRequested;
 
-  // } else if(selectionSet == VIEWINVENTORYSET){
+  console.log(supplyIndex)
 
-  // } 
+  var canTrade = true;
+
+    //high quantity items like clothing, bait or food
+    if(supplyIndex >= 1 && supplyIndex <= 3){
+      amountRequested = getRandomNumber(250) + 1; 
+    } else {
+      amountRequested = getRandomNumber(2) + 1;
+    }
+
+  switch(supplyIndex+1){
+    case 1:
+        canTrade = currentGame.inventory.oxen > amountRequested 
+        break;
+    case 2:
+        canTrade = currentGame.inventory.food > amountRequested 
+        break;
+      case 3:
+        canTrade = currentGame.inventory.clothing > amountRequested 
+      break;
+        case 4:
+        canTrade = currentGame.inventory.bait > amountRequested 
+      break;
+        case 5:
+        canTrade = currentGame.inventory.wagonWheel > amountRequested 
+      break;
+        case 6:
+        canTrade = currentGame.inventory.wagonAxle > amountRequested 
+      break;
+        case 7:
+        canTrade = currentGame.inventory.wagonTongue > amountRequested 
+      break;
+      default:
+      console.log("ERROR!")
+      break;
+    }
+
+      if(!canTrade){
+        document.getElementById("request").innerHTML = "You meet another emigrant who wants " + amountRequested + " " + supplies[supplyIndex];
+        document.getElementById("requestResult").innerHTML = "You do not have this";
+        selectionSet = CANTTRADESET;
+        document.getElementById("userDirections").style.display = "block";
+
+      } else {
+
+        document.getElementById("userInput").style.display = "block";
+
+        var offeredItem;
+        var amountOffered;
+
+        do{
+          offeredItem = getRandomNumber(supplies.length);
+        }
+        while(offeredItem == supplyIndex);
+
+        //high quantity items like clothing, bait or food
+        if(offeredItem >= 1 && offeredItem <= 3){
+          amountOffered = getRandomNumber(250);
+        } else {
+          amountOffered = getRandomNumber(2) + 1;
+        }
+        
+        document.getElementById("request").innerHTML = "You meet another emigrant who wants " + amountRequested + " " + supplies[supplyIndex] +". He will trade you "+ amountOffered + " " + supplies[offeredItem];
+        document.getElementById("requestResult").innerHTML = "Are you willing to trade?"
+        
+        yesNoQ = true;
+        selectionSet = ACCEPTTRADESET;
+        currentTrade = new Trade(supplyIndex,amountRequested,offeredItem,amountOffered);
+      }
+
+  } else if(currentGame.selectionSet == VIEWINVENTORYSET){
+    console.log("View Supplies");
+    document.getElementById("moneyLeft").style.display = "block";
+    document.getElementById("moneyLeft").innerHTML = "Money left $" + currentGame.money.toFixed(2);
+  } 
 
   document.getElementById("oxenrow").innerHTML = "Oxen " + inventory.oxen;
   document.getElementById("foodrow").innerHTML = "Food " + inventory.food;
@@ -193,8 +289,7 @@ function inventory(){
   document.getElementById("wheelrow").innerHTML = "Wagon wheels " + inventory.wagonWheel;
   document.getElementById("axlerow").innerHTML = "Wagon axles " + inventory.wagonAxle;
   document.getElementById("tonguerow").innerHTML = "Wagon toungues " + inventory.wagonTongue;
-  document.getElementById("moneyLeft").style.display = "block";
-  document.getElementById("moneyLeft").innerHTML = "Money left $" + currentGame.money.toFixed(2);
+  
 }
 //bootstrap the store when along the road
 function roadStore(){
@@ -373,6 +468,70 @@ function handleSpareParts(){
   document.getElementById("sparePartSale").innerHTML = "wagon " +part+ " -$10 each";
   document.getElementById("userInput").placeholder = "Enter your purchase amount for wagon " + part + "s"
 }
+
+function acceptTrade(trade){
+  var currentGame = JSON.parse(localStorage.getItem('currentGame'));
+
+    console.log("Before Trade: " + JSON.stringify(currentGame.inventory));
+
+    switch(trade.requestedItem + 1){
+      case 1:
+        currentGame.inventory.oxen -= trade.requestAmount;
+        break;
+      case 2:
+        currentGame.inventory.food -= trade.requestAmount;
+        break;
+      case 3:
+        currentGame.inventory.clothing -= trade.requestAmount;
+      break;
+        case 4:
+        currentGame.inventory.bait -= trade.requestAmount;
+      break;
+        case 5:
+        currentGame.inventory.wagonWheel -= trade.requestAmount;
+      break;
+        case 6:
+        currentGame.inventory.wagonAxle -= trade.requestAmount;
+      break;
+        case 7:
+        currentGame.inventory.wagonTongue -= trade.requestAmount;
+      break;
+      default:
+      console.log("ERROR!")
+      break;
+    }
+
+    switch(trade.offeredItem + 1){
+      case 1:
+        currentGame.inventory.oxen += trade.offeredAmount;
+        break;
+      case 2:
+        currentGame.inventory.food += trade.offeredAmount;
+        break;
+      case 3:
+        currentGame.inventory.clothing += trade.offeredAmount;
+      break;
+        case 4:
+        currentGame.inventory.bait += trade.offeredAmount;
+      break;
+        case 5:
+        currentGame.inventory.wagonWheel += trade.offeredAmount;
+      break;
+        case 6:
+        currentGame.inventory.wagonAxle += trade.offeredAmount;
+      break;
+        case 7:
+        currentGame.inventory.wagonTongue += trade.offeredAmount;
+      break;
+      default:
+      console.log("ERROR!")
+      break;
+    }
+
+    console.log("After Trade: " + JSON.stringify(currentGame.inventory));
+    redirect("status.html",currentGame);
+}
+
 //handles all text input
 function parseText(text)
 {
@@ -383,10 +542,20 @@ function parseText(text)
     if(text.match(/^y/))
     {
       console.log("selection was yes");
+      switch(selectionSet){
+        case ACCEPTTRADESET:
+          acceptTrade(currentTrade);
+          break;
+      }
     }
     else if (text.match(/^n/))
     {
       console.log("selection was no");
+      switch(selectionSet){
+        case ACCEPTTRADESET:
+          redirect("status.html",currentGame);
+          break;
+      }
     }
     else
     {
@@ -469,7 +638,8 @@ function parseText(text)
           //food
           showRoadItem("pounds");
         } else if(selectionSet == STATUSSET){
-          redirect(inventory.html,currentGame)
+          selectionSet = VIEWINVENTORYSET
+          redirect("inventory.html",currentGame);
         }
         else 
         {
@@ -574,6 +744,7 @@ function parseText(text)
       if(selectionSet == ROADSTORESET){
           showRoadItem("tongues");
       } else if(selectionSet == STATUSSET){
+        selectionSet = TRADESET;
         redirect("inventory.html",currentGame);
       }else {
 
@@ -770,7 +941,10 @@ function storeOverview(){
           //matt sells oxen in pairs
           currentGame.inventory.oxen *= 2;
           currentGame.money = currentGame.money - currentStore.getBill();
-          redirect("traveling.html",currentGame)
+          redirect("traveling.html",currentGame);
+          break;
+        case CANTTRADESET:
+          redirect("status.html",currentGame);
       }
 
 	  }
