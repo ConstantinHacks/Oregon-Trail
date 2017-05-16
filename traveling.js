@@ -19,11 +19,12 @@ var atLandmark = false;
 $("#notification").css("display", "none");
 // load in the next distance
 game.nextDistance = game.landmarks[0].distance;
-// variable to help with loop control when traveling
-var nextDistance = game.nextDistance;
+var nextDistance;
 var part;
 // keypress handling and updating values when page loads
 $(document).ready(function(){
+  // variable to help with loop control when traveling
+  nextDistance = game.nextDistance;
   game.date = new Date(JSON.parse(localStorage.getItem('currentGame')).date);
   $("#date").html(monthNames[game.date.getMonth()]+" "+game.date.getDate()+", "+game.date.getFullYear());
   $("#next").html(game.nextDistance);
@@ -31,6 +32,8 @@ $(document).ready(function(){
   $("#food").html(game.inventory.food);
   $("#health").html(getHealthString(game));
   $("#weather").html(game.weather);
+  $("#landmark").attr("src", game.landmarks[0].source);
+  travel();
   $(document).keypress(function(key){
     if(key.which == 32 && !atLandmark)
     {
@@ -44,7 +47,6 @@ $(document).ready(function(){
     }
     else if(key.which == 89 && atLandmark)
     {
-      alert("y");
       if(atLandmark)
       {
         redirect("landmark.html", game);
@@ -70,7 +72,6 @@ $(document).ready(function(){
 
 
 });
-travel();
 
 
 
@@ -187,7 +188,7 @@ async function healthDegredation()
       $("#notification").html(game.party[i].name + " has died.")
       $("#notification").css("display", "block");
       await sleep(1500);
-      nextDistance = 0;
+      $("#notification").css("display", "none");
     }
   }
 }

@@ -6,9 +6,10 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
 
 // displays appropriate landmark
-$("#landmark").attr("src", "Locations/"+game.landmarks[0].name+".png");
+//$("#landmark").attr("src", "Locations/"+game.landmarks[0].name+".png");
 
 $(document).ready(function(){
+  $("#landmark").attr("src", "Locations/"+game.landmarks[0].name+".png");
   $("#loc").html(game.landmarks[0].name);
   $("#date").html(monthNames[game.date.getMonth()]+" "+game.date.getDate()+", "+game.date.getFullYear()); 
   $(document).keypress(function(key){
