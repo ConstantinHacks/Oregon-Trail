@@ -227,8 +227,8 @@ function inventory(){
 
   var canTrade = true;
 
-    //high quantity items like clothing, bait or food
-    if(supplyIndex >= 1 && supplyIndex <= 3){
+    //high quantity items like bait or food
+    if(supplyIndex == 1 || supplyIndex == 3){
       amountRequested = getRandomNumber(250) + 1; 
     } else {
       amountRequested = getRandomNumber(2) + 1;
