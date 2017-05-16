@@ -3,7 +3,7 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
 var distances = [ "50%", "40%", "30%","20%", "10%", "0%"];
-game.selectionset = 
+
 
 $(document).ready(function(){
   game.date = new Date(JSON.parse(localStorage.getItem('currentGame')).date);
@@ -15,6 +15,9 @@ $(document).ready(function(){
 });
 travel();
 
+
+
+
 async function travel()
 {
   while(game.nextDistance > 0)
@@ -22,7 +25,12 @@ async function travel()
     // if the distance to next landmark will be hit miles() would return a number
     // > game.nextDistance, thus the remaining distance should be subtracted from 
     // nextDistance and added to totalDistance, otherwise miles() returns the proper value
-    //alert("gonna switch");
+    //chaos function
+    // update health
+    for(i=0; i<game.party.length; i++)
+    {
+      game.party[i].health -= game.ration - game.pace - 
+    }
     movement = miles();
     await sleep(50);
     animation(movement);
@@ -42,10 +50,17 @@ async function travel()
     $("#total").html(game.totalDistance);
     $("#landmark").animate({left: distances[Math.floor(game.nextDistance/movement)]},500);
     $("#food").html(game.inventory.food);
+
     //await sleep(750);
-    //alert('done');
 
   }
+  // nextDistance == 0, therefeore at a landmark, process landmark event 
+  // bring up would you like to look around menu
+
+  // check for yes or no
+
+  //
+
 }
 
 function miles()
@@ -72,5 +87,10 @@ async function animation(movement)
     $('#travel').attr("src", "traveling.png");
     await sleep(50);
   }
+
+}
+
+function healthDegredation(currHealth)
+{
 
 }
