@@ -5,9 +5,9 @@ body {
 #choiceBox {
 	color: white;
 	position: absolute;
-	top: 37%;
-	right: 50%;
-	-webkit-transform: translate(50%,0%);
+	bottom: 10%;
+	left: 50%;
+	-webkit-transform: translate(-50%,0%);
 	font-size: 35px;
 }
 
@@ -15,8 +15,20 @@ body {
 	margin-top: 2%;
 }
 
-#dateTime {
-	text-align: center;
+#date {
+	-webkit-transform: translate(-50%,0%);
+	position:absolute;
+	top:50%;
+	left: 50%;
+	color: white;
+	font-size: 35px;
+}
+
+#loc {
+	-webkit-transform: translate(-50%,0%);
+	top:45%;
+	position: absolute;
+	left: 50%;
 	color: white;
 	font-size: 35px;
 }
@@ -24,6 +36,9 @@ body {
 #userDirections {
 	font-size: 25px;
 	color: white;
+	left: 50%;
+	-webkit-transform: translate(-50%,0%);
 	text-align: center;
-	margin-top: 2%;
+	position:absolute;
+	bottom: 2%;
 }

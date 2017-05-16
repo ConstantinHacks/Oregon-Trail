@@ -6,6 +6,8 @@
 		<title>The Oregon Trail</title>
 
 		<link rel="stylesheet" type="text/css" href="landmark.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+		<script type="text/javascript" src="landmark.js"></script>
 	</head>
 
 	<body>
@@ -13,13 +15,13 @@
 				<source src="Country_Hymn.mp3" type="audio/mpeg">
 			</audio>
 		<div id="wrapper">
-			<div id="landmark">
-				<center><img src="independence.jpg" id=titleLogo style="width: 700px;"></center>
+			<div>
+				<center><img id="landmark" src="Locations/Independence.png" style="width: 700px;"></center>
 			</div>
-			<div id="dateTime">
-				Independence
+			<div>
+				<span id="loc"></span>
 				<br>
-				Month Day, Year
+				<span id="date"></span>
 			</div>
 			<div id="userDirections"> <i>Press <b>SPACE BAR</b> to continue.</i> </div>
 

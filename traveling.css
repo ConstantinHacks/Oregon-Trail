@@ -40,6 +40,7 @@ body {
 #notification
 {
 	display: none;
+	-webkit-transform: translate(-50%,0%);
 	color: white;
 	background-color: black;
 	position: absolute;

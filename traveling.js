@@ -1,16 +1,26 @@
 // reloads the game
 game = JSON.parse(localStorage.getItem('currentGame'));
+// global variables
+// list of month names for display purposes
 var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
+// distances to help move landmarks
 var distances = [ "50%", "40%", "30%","20%", "10%", "0%"];
+// health constants
 GOOD_HEALTH = 500;
 FAIR_HEALTH = 400;
 POOR_HEALTH = 300;
 VERY_POOR_HEALTH = 200;
-var nextDistance = game.nextDistance;
+// variable to help with keypress handling
 var atLandmark = false;
+// ensure notification element is hidden every time entering this page
 $("#notification").css("display", "none");
+// load in the next distance
+game.nextDistance = game.landmarks[0].distance;
+// variable to help with loop control when traveling
+var nextDistance = game.nextDistance;
 
+// keypress handling and updating values when page loads
 $(document).ready(function(){
   game.date = new Date(JSON.parse(localStorage.getItem('currentGame')).date);
   $("#date").html(monthNames[game.date.getMonth()]+" "+game.date.getDate()+", "+game.date.getFullYear());
@@ -32,11 +42,11 @@ $(document).ready(function(){
     }
     else if(key.which == 89 && atLandmark)
     {
-      redirect("event.html", game);
+      redirect("landmark.html", game);
     }
     else if(key.which == 78 && atLandmark)
    {
-      redirect("")
+      alert("registered here");
    }
   });
 
@@ -80,18 +90,15 @@ async function travel()
     $("#food").html(game.inventory.food);
     $("#health").html(getHealthString());
     $("weather").html(game.weather);
-
-    //await sleep(750);
-
   }
   // nextDistance == 0, therefeore at a landmark, process landmark event 
   // bring up would you like to look around menu
-  atLandmark = true;
-  $("notification.html").html("Would you like to take a look around? y/n");
-  // check for yes or no
-
-  //
-
+  if(game.nextDistance == 0)
+  {
+    atLandmark = true;
+    $("#notification").html("Would you like to take a look around? Shift+y/n");
+    $("#notification").css("display", "block");
+  }
 }
 
 function miles()
@@ -189,7 +196,7 @@ function chaos()
 }
 
 function redirect(path,gameState){
-  gameState.selectionSet = selectionSet;
+  //gameState.selectionSet = selectionSet;
   localStorage.setItem('currentGame', JSON.stringify(gameState));
   $(location).attr('href', path)
 }

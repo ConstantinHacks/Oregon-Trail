@@ -68,6 +68,26 @@ var paceNames = ["Steady", "Strenous", "Grueling"];
 
 var rationNames = ["Filling","Meager","Bare Bones"];
 
+var landmarks = [{name: "Independence", type: "fort", distance: 0, multiplier: 0, branch: false},
+                 {name: "Kansas River", type: "river", distance: 102, multiplier: 0, branch: false},
+                 {name: "Big Blue River", type: "river", distance: 83, multiplier: 0, branch: false},
+                 {name: "Fort Kearney", type: "fort", distance: 119, multiplier: 1, branch: false},
+                 {name: "Chimney Rock", type: "rock", distance: 250, multiplier: 0, branch: false},
+                 {name: "Fort Laramie", type: "fort", distance: 86, multiplier: 2, branch: false},
+                 {name: "Independence Rock", type: "rock", distance: 190, multiplier: 0, branch: false},
+                 {name: "South Pass", type: "pass", distance: 102, multiplier: 0, branch: true},
+                 {name: "Green River", type: "river", distance: 57, multiplier: 0, branch: false},
+                 {name: "Fort Bridger", type: "fort", distance: 125, multiplier: 3, branch: false},
+                 {name: "Soda Springs", type: "springs", distance: 144, multiplier: 0, branch: false},
+                 {name: "Fort Hall", type: "fort", distance: 57, multiplier: 4, branch: false},
+                 {name: "Snake River", type: "river", distance: 182, multiplier: 0, branch: false},
+                 {name: "Fort Boise", type: "fort", distance: 114, multiplier: 5, branch: false},
+                 {name: "Blue Mountains", type: "rock", distance: 160, multiplier: 0, branch: true},
+                 {name: "Fort Walla Walla", type: "fort", distance: 55, multiplier: 6, branch: false},
+                 {name: "The Dalles", type: "river", distance: 120, multiplier: 0, branch: true},
+                 {name: "Willamette Valley", type: "valley", distance:100, multiplier:0, branch: false}
+                ]
+
 //creates a Trade object
 function Trade(requestedItem,requestAmount,offeredItem,offeredAmount){
   this.requestedItem = requestedItem;
@@ -83,12 +103,13 @@ function Game(occupation,money,selectionSet){
    this.occupation = occupation;
    this.money = money;
    this.selectionSet = selectionSet;
-   this.nextDistance = 102;
+   this.nextDistance = 0;
    this.totalDistance = 0;
    this.pace = 2;
    this.ration = 2;
    this.currentTown = "Independence"
    this.weather = "cool"
+   this.landmarks = landmarks;
    //rest of the attributes added as they are entered.
 }
 
