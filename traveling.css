@@ -36,3 +36,15 @@ body {
 	left: -12%;
 	top: 115px;
 }
+
+#notification
+{
+	display: none;
+	color: white;
+	background-color: black;
+	position: absolute;
+	top: 18%;
+	left: 48%;
+	font-size: 40px
+
+}

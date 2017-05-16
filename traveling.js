@@ -3,6 +3,13 @@ game = JSON.parse(localStorage.getItem('currentGame'));
 var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
 var distances = [ "50%", "40%", "30%","20%", "10%", "0%"];
+GOOD_HEALTH = 500;
+FAIR_HEALTH = 400;
+POOR_HEALTH = 300;
+VERY_POOR_HEALTH = 200;
+var nextDistance = game.nextDistance;
+var atLandmark = false;
+$("#notification").css("display", "none");
 
 $(document).ready(function(){
   game.date = new Date(JSON.parse(localStorage.getItem('currentGame')).date);
@@ -12,6 +19,27 @@ $(document).ready(function(){
   $("#food").html(game.inventory.food);
   $("#health").html(getHealthString(game));
   $("#weather").html(game.weather);
+  $(document).keypress(function(key){
+    if(key.which == 32 && !atLandmark)
+    {
+      $("#notification").css("display", "none");
+      nextDistance = game.nextDistance;
+      travel();
+    }
+    else if(key.which == 13 && !atLandmark)
+    {
+      redirect("status.html", game);
+    }
+    else if(key.which == 89 && atLandmark)
+    {
+      redirect("event.html", game);
+    }
+    else if(key.which == 78 && atLandmark)
+   {
+      redirect("")
+   }
+  });
+
 
 });
 travel();
@@ -21,8 +49,10 @@ travel();
 
 async function travel()
 {
-  while(game.nextDistance > 0)
+
+  while(nextDistance > 0)
   {
+    nextDistance = game.nextDistance;
     // if the distance to next landmark will be hit miles() would return a number
     // > game.nextDistance, thus the remaining distance should be subtracted from 
     // nextDistance and added to totalDistance, otherwise miles() returns the proper value
@@ -56,7 +86,8 @@ async function travel()
   }
   // nextDistance == 0, therefeore at a landmark, process landmark event 
   // bring up would you like to look around menu
-
+  atLandmark = true;
+  $("notification.html").html("Would you like to take a look around? y/n");
   // check for yes or no
 
   //
@@ -90,9 +121,9 @@ async function animation(movement)
 
 }
 
-function healthDegredation()
+async function healthDegredation()
 {
-  weatherEffect;
+  var weatherEffect = 0;
   // is mild weather
   if(game.weather == "cool" || game.weather == "warm")
   {
@@ -110,16 +141,30 @@ function healthDegredation()
   }
   for(i=0; i<game.party.length; i++)
   {
-    game.party[i].health -= 5*((4 - game.ration) - game.pace - game.party[i].illness - weatherEffect);
+    if(game.party.length > 1 && i==0)
+    {
+      game.party[i].health = Math.max(game.party[i].health - ((4 - game.ration) + game.pace + game.party[i].illness + weatherEffect), 200);
+    }
+    else
+    {
+      game.party[i].health -= ((4 - game.ration) + game.pace + game.party[i].illness + weatherEffect);
+    }
+    if(game.party[i].health <= 0)
+    {
+      $("#notification").html(game.party[i].name + " has died.")
+      $("#notification").css("display", "block");
+      await sleep(1500);
+      nextDistance = 0;
+    }
   }
 }
 
-function getHealthString(game){
+function getHealthString(){
   totalHealth = 0;
-  for(var i=0;i<5;i++){
+  for(var i=0;i<game.party.length;i++){
     totalHealth += game.party[i].health;
   }
-  avgHealth = totalHealth/5;
+  avgHealth = totalHealth/game.party.length;
 
   if (avgHealth > FAIR_HEALTH){
     return "Good"
@@ -141,4 +186,10 @@ function chaos()
 
 
   return stop;
+}
+
+function redirect(path,gameState){
+  gameState.selectionSet = selectionSet;
+  localStorage.setItem('currentGame', JSON.stringify(gameState));
+  $(location).attr('href', path)
 }
