@@ -1,10 +1,24 @@
 $(document).ready(function(){
+	var wag = document.getElementById("wagon");
+	var wago = wag.getBoundingClientRect();
+	console.log(wago.left + "px ");
+
+
 	$(document).keydown(function(key) {
+		wago = wag.getBoundingClientRect();
 		if (key.keyCode == 37) { // left
-			$("#wagon").animate({left: "-=10px"});
+			if (wago.left < 591.890625) {
+				console.log("crashed right")
+			} else {
+				$("#wagon").animate({left: "-=10px"});
+			}
 		}
 		if (key.keyCode == 39) { // right
-			$("#wagon").animate({right: "-=10px"});
+			if (wago.left < 191.890625) {
+				console.log("crashed left")				
+			} else {
+				$("#wagon").animate({left: "+=10px"});
+			}
 		}
 	});
 });
