@@ -3,6 +3,9 @@ var ROUGH_DEPTH = 5; //smallest penalty in case of failure
 var SEVERE_DEPTH = 10; //larger penalty in case of failure
 var CRITICAL_DEPTH = 15; //largest penalty in case of failure
 
+$("#notification").hide();
+var notified = false; //bool to see if the notification is showing
+
 function River(name, width, depth){
 	this.name = name;
 	this.width = width;
@@ -12,30 +15,47 @@ game = JSON.parse(localStorage.getItem('currentGame'));
 
 function ford(depth){
 	if(depth > SAFE_DEPTH){
+		$("#notification").text("The river is too deep to\nford. You lose:\n");
+		var lostFood = 0;
+		var lostBait = 0;
+		var lostWagonParts = [];
+		var lostClothes = 0;
+		var lostOxen = 0;
+		var lostPeople = [];
 		//determine what is lost and display
 		if(depth <= ROUGH_DEPTH){
 			//see how much food/bait is lost
-			var lostFood = Math.floor(Math.random()*50);
-			var lostBait = Math.floor(Math.random()*50);
+			lostFood = Math.floor(Math.random()*50);
+			lostBait = Math.floor(Math.random()*50);
 			game.inventory.food -= lostFood;
 			game.inventory.bait -= lostBait;
 			if(game.inventory.food < 0){ game.inventory.food = 0; }
 			if(game.inventory.bait < 0){ game.inventory.bait = 0; }
+			
 		}
 		else if(depth <= SEVERE_DEPTH){
 			//see how much food/bait/parts/clothing is lost
-			var lostFood = Math.floor(Math.random()*100);
-			var lostBait = Math.floor(Math.random()*200);
+			lostFood = Math.floor(Math.random()*100);
+			lostBait = Math.floor(Math.random()*200);
 			var lostParts = Math.floor(Math.random()*100)+1;
-			var lostClothes = Math.floor(Math.random()*5);
+			lostClothes = Math.floor(Math.random()*5);
 			game.inventory.food -= lostFood;
 			game.inventory.bait -= lostBait;
 			game.inventory.clothing -= lostClothes;
-			if(lostParts % 3 == 0){ game.inventory.wagonWheel -= 1; }
+			if(lostParts % 3 == 0){ 
+				game.inventory.wagonWheel -= 1; 
+				lostWagonParts.push("1 wagon wheel");
+			}
 			lostParts = Math.floor(Math.random()*100)+1;
-			if(lostParts % 3 == 0){ game.inventory.wagonAxle -= 1; }
+			if(lostParts % 3 == 0){ 
+				game.inventory.wagonAxle -= 1; 
+				lostWagonParts.push("1 wagon axle");
+			}
 			lostParts = Math.floor(Math.random()*100)+1;
-			if(lostParts % 3 == 0){ game.inventory.wagonTongue -= 1; }
+			if(lostParts % 3 == 0){ 
+				game.inventory.wagonTongue -= 1; 
+				lostWagonParts.push("1 wagon tongue");
+			}
 			if(game.inventory.food < 0){ game.inventory.food = 0; }
 			if(game.inventory.bait < 0){ game.inventory.bait = 0; }
 			if(game.inventory.clothing < 0){ game.inventory.clothing = 0; }
@@ -45,23 +65,35 @@ function ford(depth){
 		}
 		else if(depth <= CRITICAL_DEPTH){
 			//see how much food/bait/parts/clothing/oxen/people are lost
-			var lostFood = Math.floor(Math.random()*500);
-			var lostBait = Math.floor(Math.random()*1000);
+			lostFood = Math.floor(Math.random()*500);
+			lostBait = Math.floor(Math.random()*1000);
 			var lostParts = Math.floor(Math.random()*100)+1;
-			var lostClothes = Math.floor(Math.random()*8);
-			var lostOxen = Math.floor(Math.random()*3);
+			lostClothes = Math.floor(Math.random()*8);
+			lostOxen = Math.floor(Math.random()*3);
 			var lostPerson = Math.floor(Math.random()*100)+1;
 			game.inventory.food -= lostFood;
 			game.inventory.bait -= lostBait;
 			game.inventory.clothing -= lostClothes;
 			game.inventory.oxen -= lostOxen;
-			if(lostParts % 2 == 0){ game.inventory.wagonWheel -= 1; }
+			if(lostParts % 2 == 0){ 
+				game.inventory.wagonWheel -= 1; 
+				lostWagonParts.push("1 wagon wheel");
+			}
 			lostParts = Math.floor(Math.random()*100)+1;
-			if(lostParts % 2 == 0){ game.inventory.wagonAxle -= 1; }
+			if(lostParts % 2 == 0){ 
+				game.inventory.wagonAxle -= 1;
+				lostWagonParts.push("1 wagon axle");
+			}
 			lostParts = Math.floor(Math.random()*100)+1;
-			if(lostParts % 2 == 0){ game.inventory.wagonTongue -= 1; }
+			if(lostParts % 2 == 0){ 
+				game.inventory.wagonTongue -= 1; 
+				lostWagonParts.push("1 wagon tongue");
+			}
 			for(var i = 0; i < game.party.length; i++){
-				if(lostPerson % 5 == 0){ game.party[i].health = 0; }
+				if(lostPerson % 5 == 0){ 
+					game.party[i].health = 0; 
+					lostPeople.push(game.party[i].name+" (drowned)");
+				}
 				lostPerson = Math.floor(Math.random()*100)+1;
 			}
 			if(game.inventory.food < 0){ game.inventory.food = 0; }
@@ -74,23 +106,35 @@ function ford(depth){
 		}
 		else{
 			//see how much food/bait/parts/clothing/oxen/people are lost
-			var lostFood = Math.floor(Math.random()*1500);
-			var lostBait = Math.floor(Math.random()*2500);
+			lostFood = Math.floor(Math.random()*1500);
+			lostBait = Math.floor(Math.random()*2500);
 			var lostParts = Math.floor(Math.random()*100)+1;
-			var lostClothes = Math.floor(Math.random()*20);
-			var lostOxen = Math.floor(Math.random()*15);
+			lostClothes = Math.floor(Math.random()*20);
+			lostOxen = Math.floor(Math.random()*15);
 			var lostPerson = Math.floor(Math.random()*100)+1;
 			game.inventory.food -= lostFood;
 			game.inventory.bait -= lostBait;
 			game.inventory.clothing -= lostClothes;
 			game.inventory.oxen -= lostOxen;
-			if(lostParts % 2 == 0){ game.inventory.wagonWheel -= 2; }
+			if(lostParts % 2 == 0){ 
+				game.inventory.wagonWheel -= 2; 
+				lostWagonParts.push("2 wagon wheels");
+			}
 			lostParts = Math.floor(Math.random()*100)+1;
-			if(lostParts % 2 == 0){ game.inventory.wagonAxle -= 2; }
+			if(lostParts % 2 == 0){ 
+				game.inventory.wagonAxle -= 2; 
+				lostWagonParts.push("2 wagon axles");
+			}
 			lostParts = Math.floor(Math.random()*100)+1;
-			if(lostParts % 2 == 0){ game.inventory.wagonTongue -= 2; }
+			if(lostParts % 2 == 0){ 
+				game.inventory.wagonTongue -= 2; 
+				lostWagonParts.push("2 wagon tongues");
+			}
 			for(var i = 0; i < game.party.length; i++){
-				if(lostPerson % 3 == 0){ game.party[i].health = 0; }
+				if(lostPerson % 3 == 0){ 
+					game.party[i].health = 0; 
+					lostPeople.push(game.party[i].name+" (drowned)");
+				}
 				lostPerson = Math.floor(Math.random()*100)+1;
 			}
 			if(game.inventory.food < 0){ game.inventory.food = 0; }
@@ -101,9 +145,49 @@ function ford(depth){
 			if(game.inventory.wagonTongue < 0){ game.inventory.wagonTongue = 0; }
 			if(game.inventory.oxen < 0){ game.inventory.oxen = 0; }
 		}
+		if(lostClothes != 0){
+			$("#notification").append(lostClothes + " set of clothing\n");
+		}
+		if(lostBait != 0){
+			$("#notification").append(lostBait + " bait\n");
+		}
+		if(lostWagonParts.length != 0){
+			for (part in lostWagonParts){
+				$("#notification").append(part + "\n");
+			}
+		}
+		if(lostFood != 0){
+			$("#notification").append(lostFood + " pounds of food\n");
+		}
+		if(lostOxen != 0){
+			$("#notification").append(lostOxen + " oxen\n");
+		}
+		if(lostPeople.length != 0){
+			for (person in lostPeople){
+				$("#notification").append(person + "\n");
+			}
+		}
 	}
 	else{
 		//display success message
+		var wet = Math.floor(Math.random()*100)+1;
+		if(wet % 3 == 0){
+			$("#notification").text("Your supplies got wet.\nLose 1 day.");
+			//simulate 1 day
+		}
+		else{
+			$("#notification").text("It was a muddy crossing,\nbut you did not get\nstuck.");
+		}
+	}
+	$("#notification").show();
+	while(true){
+		window.onkeyup = function(e){
+			if(e.which == 32){
+				$("#notification").hide();
+				localStorage.setItem('currentGame', JSON.stringify(game));
+				$(location).attr('href', 'traveling.html')
+			}
+		}
 	}
 }
 
@@ -114,30 +198,47 @@ function caulk(river){
 	while (feetTraveled < river.width){
 		if(feetTraveled != 0 && feetTraveled % 25 == 0){
 			if((Math.random()*100) < raftTips){
+				$("#notification").text("The wagon tipped over\nwhile floating. You lose:\n");
+				var lostFood = 0;
+				var lostBait = 0;
+				var lostWagonParts = [];
+				var lostClothes = 0;
+				var lostOxen = 0;
+				var lostPeople = [];
 				//determine what is lost and display
-				if(river.depth <= ROUGH_DEPTH){
+				if(depth <= ROUGH_DEPTH){
 					//see how much food/bait is lost
-					var lostFood = Math.floor(Math.random()*50);
-					var lostBait = Math.floor(Math.random()*50);
+					lostFood = Math.floor(Math.random()*50);
+					lostBait = Math.floor(Math.random()*50);
 					game.inventory.food -= lostFood;
 					game.inventory.bait -= lostBait;
 					if(game.inventory.food < 0){ game.inventory.food = 0; }
 					if(game.inventory.bait < 0){ game.inventory.bait = 0; }
+					
 				}
-				else if(river.depth <= SEVERE_DEPTH){
+				else if(depth <= SEVERE_DEPTH){
 					//see how much food/bait/parts/clothing is lost
-					var lostFood = Math.floor(Math.random()*100);
-					var lostBait = Math.floor(Math.random()*200);
+					lostFood = Math.floor(Math.random()*100);
+					lostBait = Math.floor(Math.random()*200);
 					var lostParts = Math.floor(Math.random()*100)+1;
-					var lostClothes = Math.floor(Math.random()*5);
+					lostClothes = Math.floor(Math.random()*5);
 					game.inventory.food -= lostFood;
 					game.inventory.bait -= lostBait;
 					game.inventory.clothing -= lostClothes;
-					if(lostParts % 3 == 0){ game.inventory.wagonWheel -= 1; }
+					if(lostParts % 3 == 0){ 
+						game.inventory.wagonWheel -= 1; 
+						lostWagonParts.push("1 wagon wheel");
+					}
 					lostParts = Math.floor(Math.random()*100)+1;
-					if(lostParts % 3 == 0){ game.inventory.wagonAxle -= 1; }
+					if(lostParts % 3 == 0){ 
+						game.inventory.wagonAxle -= 1; 
+						lostWagonParts.push("1 wagon axle");
+					}
 					lostParts = Math.floor(Math.random()*100)+1;
-					if(lostParts % 3 == 0){ game.inventory.wagonTongue -= 1; }
+					if(lostParts % 3 == 0){ 
+						game.inventory.wagonTongue -= 1; 
+						lostWagonParts.push("1 wagon tongue");
+					}
 					if(game.inventory.food < 0){ game.inventory.food = 0; }
 					if(game.inventory.bait < 0){ game.inventory.bait = 0; }
 					if(game.inventory.clothing < 0){ game.inventory.clothing = 0; }
@@ -145,25 +246,37 @@ function caulk(river){
 					if(game.inventory.wagonAxle < 0){ game.inventory.wagonAxle = 0; }
 					if(game.inventory.wagonTongue < 0){ game.inventory.wagonTongue = 0; }
 				}
-				else if(river.depth <= CRITICAL_DEPTH){
+				else if(depth <= CRITICAL_DEPTH){
 					//see how much food/bait/parts/clothing/oxen/people are lost
-					var lostFood = Math.floor(Math.random()*500);
-					var lostBait = Math.floor(Math.random()*1000);
+					lostFood = Math.floor(Math.random()*500);
+					lostBait = Math.floor(Math.random()*1000);
 					var lostParts = Math.floor(Math.random()*100)+1;
-					var lostClothes = Math.floor(Math.random()*8);
-					var lostOxen = Math.floor(Math.random()*3);
+					lostClothes = Math.floor(Math.random()*8);
+					lostOxen = Math.floor(Math.random()*3);
 					var lostPerson = Math.floor(Math.random()*100)+1;
 					game.inventory.food -= lostFood;
 					game.inventory.bait -= lostBait;
 					game.inventory.clothing -= lostClothes;
 					game.inventory.oxen -= lostOxen;
-					if(lostParts % 2 == 0){ game.inventory.wagonWheel -= 1; }
+					if(lostParts % 2 == 0){ 
+						game.inventory.wagonWheel -= 1; 
+						lostWagonParts.push("1 wagon wheel");
+					}
 					lostParts = Math.floor(Math.random()*100)+1;
-					if(lostParts % 2 == 0){ game.inventory.wagonAxle -= 1; }
+					if(lostParts % 2 == 0){ 
+						game.inventory.wagonAxle -= 1;
+						lostWagonParts.push("1 wagon axle");
+					}
 					lostParts = Math.floor(Math.random()*100)+1;
-					if(lostParts % 2 == 0){ game.inventory.wagonTongue -= 1; }
+					if(lostParts % 2 == 0){ 
+						game.inventory.wagonTongue -= 1; 
+						lostWagonParts.push("1 wagon tongue");
+					}
 					for(var i = 0; i < game.party.length; i++){
-						if(lostPerson % 5 == 0){ game.party[i].health = 0; }
+						if(lostPerson % 5 == 0){ 
+							game.party[i].health = 0; 
+							lostPeople.push(game.party[i].name+" (drowned)");
+						}
 						lostPerson = Math.floor(Math.random()*100)+1;
 					}
 					if(game.inventory.food < 0){ game.inventory.food = 0; }
@@ -176,23 +289,35 @@ function caulk(river){
 				}
 				else{
 					//see how much food/bait/parts/clothing/oxen/people are lost
-					var lostFood = Math.floor(Math.random()*1500);
-					var lostBait = Math.floor(Math.random()*2500);
+					lostFood = Math.floor(Math.random()*1500);
+					lostBait = Math.floor(Math.random()*2500);
 					var lostParts = Math.floor(Math.random()*100)+1;
-					var lostClothes = Math.floor(Math.random()*20);
-					var lostOxen = Math.floor(Math.random()*15);
+					lostClothes = Math.floor(Math.random()*20);
+					lostOxen = Math.floor(Math.random()*15);
 					var lostPerson = Math.floor(Math.random()*100)+1;
 					game.inventory.food -= lostFood;
 					game.inventory.bait -= lostBait;
 					game.inventory.clothing -= lostClothes;
 					game.inventory.oxen -= lostOxen;
-					if(lostParts % 2 == 0){ game.inventory.wagonWheel -= 2; }
+					if(lostParts % 2 == 0){ 
+						game.inventory.wagonWheel -= 2; 
+						lostWagonParts.push("2 wagon wheels");
+					}
 					lostParts = Math.floor(Math.random()*100)+1;
-					if(lostParts % 2 == 0){ game.inventory.wagonAxle -= 2; }
+					if(lostParts % 2 == 0){ 
+						game.inventory.wagonAxle -= 2; 
+						lostWagonParts.push("2 wagon axles");
+					}
 					lostParts = Math.floor(Math.random()*100)+1;
-					if(lostParts % 2 == 0){ game.inventory.wagonTongue -= 2; }
+					if(lostParts % 2 == 0){ 
+						game.inventory.wagonTongue -= 2; 
+						lostWagonParts.push("2 wagon tongues");
+					}
 					for(var i = 0; i < game.party.length; i++){
-						if(lostPerson % 3 == 0){ game.party[i].health = 0; }
+						if(lostPerson % 3 == 0){ 
+							game.party[i].health = 0; 
+							lostPeople.push(game.party[i].name+" (drowned)");
+						}
 						lostPerson = Math.floor(Math.random()*100)+1;
 					}
 					if(game.inventory.food < 0){ game.inventory.food = 0; }
@@ -203,13 +328,56 @@ function caulk(river){
 					if(game.inventory.wagonTongue < 0){ game.inventory.wagonTongue = 0; }
 					if(game.inventory.oxen < 0){ game.inventory.oxen = 0; }
 				}
+				if(lostClothes != 0){
+					$("#notification").append(lostClothes + " set of clothing\n");
+				}
+				if(lostBait != 0){
+					$("#notification").append(lostBait + " bait\n");
+				}
+				if(lostWagonParts.length != 0){
+					for (part in lostWagonParts){
+						$("#notification").append(part + "\n");
+					}
+				}
+				if(lostFood != 0){
+					$("#notification").append(lostFood + " pounds of food\n");
+				}
+				if(lostOxen != 0){
+					$("#notification").append(lostOxen + " oxen\n");
+				}
+				if(lostPeople.length != 0){
+					for (person in lostPeople){
+						$("#notification").append(person + "\n");
+					}
+				}
 				noTrouble = false;
+				$("#notification").show();
+				notified = true;
+				while(notified){
+					window.onkeyup = function(e){
+						if(e.which == 32){
+							$("#notification").hide();
+							notified = false;
+						}
+					}
+				}
 			}
 		}
 		feetTraveled++;
 	}
 	if(noTrouble){
 		//display no trouble message
+		$("#notification").text("You had no trouble\nfloating the wagon across.");
+		$("#notification").show();
+		while(true){
+			window.onkeyup = function(e){
+				if(e.which == 32){
+					$("#notification").hide();
+					localStorage.setItem('currentGame', JSON.stringify(game));
+					$(location).attr('href', 'traveling.html')
+				}
+			}
+		}
 	}
 }
 
