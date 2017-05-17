@@ -2,20 +2,57 @@ var SAFE_DEPTH = 3; //max depth to safely ford
 var ROUGH_DEPTH = 5; //smallest penalty in case of failure
 var SEVERE_DEPTH = 10; //larger penalty in case of failure
 var CRITICAL_DEPTH = 15; //largest penalty in case of failure
-
-$("#notification").hide();
-var notified = false; //bool to see if the notification is showing
-
-function River(name, width, depth){
-	this.name = name;
-	this.width = width;
-	this.depth = depth;
-}
+var river;
+var monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
 game = JSON.parse(localStorage.getItem('currentGame'));
+river = new River(game.landmarks[0].name);
+game.date = new Date(JSON.parse(localStorage.getItem('currentGame')).date);
+$(document).ready(function(){
+	$("#name").html(game.landmarks[0].name + " Crossing");
+  $("#date").html(monthNames[game.date.getMonth()]+" "+game.date.getDate()+", "+game.date.getFullYear());
+	$("#text").html("You must cross the river in order to continue. The river at this point is currently "
+		+ river.width + " feet across, and " + river.depth + " feet deep in the middle");
+	$(document).keypress(function(key){
+		if(key.which == 32)
+		{
+			
+		}
+	});
+
+});
+
+function River(name){
+	if (name == "Kansas River")
+	{
+		this.width = Math.floor(Math.random() * (630 - 610 + 1) ) + 610;
+		this.depth = Math.floor(Math.random() * (5 - 3 + 1) ) + 3;
+		this.ferry = true;
+	}
+	else if(name == "Green River")
+	{
+		this.width = Math.floor(Math.random() * (240 - 220 + 1) ) + 220;
+		this.depth = Math.floor(Math.random() * (4.5 - 2.5 + 1) ) + 3;
+		this.ferry = true;
+	}
+	else if(name == "Big Blue River")
+	{
+		this.width = Math.floor(Math.random() * (1050 - 950 + 1) ) + 950;
+		this.depth = Math.floor(Math.random() * (21 - 19 + 1) ) + 19;
+		this.ferry = true;
+	}
+	else
+	{
+		this.width = Math.floor(Math.random() * (1050 - 950 + 1) ) + 950;
+		this.depth = Math.floor(Math.random() * (10 - 6 + 1) ) + 6;
+		this.ferry = false;
+	}
+	this.river = name;
+}
 
 function ford(depth){
 	if(depth > SAFE_DEPTH){
-		$("#notification").text("The river is too deep to\nford. You lose:\n");
+		$("#text").text("The river is too deep to\nford. You lose:\n");
 		var lostFood = 0;
 		var lostBait = 0;
 		var lostWagonParts = [];
@@ -89,8 +126,8 @@ function ford(depth){
 				game.inventory.wagonTongue -= 1; 
 				lostWagonParts.push("1 wagon tongue");
 			}
-			for(var i = 0; i < game.party.length; i++){
-				if(lostPerson % 5 == 0){ 
+			for(var i = 1; i < game.party.length; i++){
+				if(lostPerson % 4 == 0){ 
 					game.party[i].health = 0; 
 					lostPeople.push(game.party[i].name+" (drowned)");
 				}
@@ -130,7 +167,7 @@ function ford(depth){
 				game.inventory.wagonTongue -= 2; 
 				lostWagonParts.push("2 wagon tongues");
 			}
-			for(var i = 0; i < game.party.length; i++){
+			for(var i = 1; i < game.party.length; i++){
 				if(lostPerson % 3 == 0){ 
 					game.party[i].health = 0; 
 					lostPeople.push(game.party[i].name+" (drowned)");
@@ -173,7 +210,7 @@ function ford(depth){
 		var wet = Math.floor(Math.random()*100)+1;
 		if(wet % 3 == 0){
 			$("#notification").text("Your supplies got wet.\nLose 1 day.");
-			//simulate 1 day
+			game.date = new Date(game.date)+1;
 		}
 		else{
 			$("#notification").text("It was a muddy crossing,\nbut you did not get\nstuck.");
@@ -196,7 +233,7 @@ function caulk(river){
 	var raftTips = river.depth;
 	var noTrouble = true;
 	while (feetTraveled < river.width){
-		if(feetTraveled != 0 && feetTraveled % 25 == 0){
+		if(feetTraveled != 0 && feetTraveled % 75 == 0){
 			if((Math.random()*100) < raftTips){
 				$("#notification").text("The wagon tipped over\nwhile floating. You lose:\n");
 				var lostFood = 0;
@@ -272,7 +309,7 @@ function caulk(river){
 						game.inventory.wagonTongue -= 1; 
 						lostWagonParts.push("1 wagon tongue");
 					}
-					for(var i = 0; i < game.party.length; i++){
+					for(var i = 1; i < game.party.length; i++){
 						if(lostPerson % 5 == 0){ 
 							game.party[i].health = 0; 
 							lostPeople.push(game.party[i].name+" (drowned)");
@@ -313,7 +350,7 @@ function caulk(river){
 						game.inventory.wagonTongue -= 2; 
 						lostWagonParts.push("2 wagon tongues");
 					}
-					for(var i = 0; i < game.party.length; i++){
+					for(var i = 1; i < game.party.length; i++){
 						if(lostPerson % 3 == 0){ 
 							game.party[i].health = 0; 
 							lostPeople.push(game.party[i].name+" (drowned)");

@@ -26,6 +26,10 @@ $(document).ready(function(){
   // variable to help with loop control when traveling
   nextDistance = game.nextDistance;
   game.date = new Date(JSON.parse(localStorage.getItem('currentGame')).date);
+  for(i=0; i<game.party.length; i++)
+  {
+    game.party[i].health = parseInt(game.party[i].health);
+  }
   $("#date").html(monthNames[game.date.getMonth()]+" "+game.date.getDate()+", "+game.date.getFullYear());
   $("#next").html(game.nextDistance);
   $("#total").html(game.totalDistance);
@@ -171,6 +175,7 @@ async function healthDegredation()
   }
   for(i=0; i<game.party.length; i++)
   {
+    //game.party[i].health = parseInt(game.party[i].health);
     if(game.party.length > 1 && i==0)
     {
       game.party[i].health = Math.max(game.party[i].health - ((4 - game.ration) + game.pace + game.party[i].illness + weatherEffect), 200);
@@ -196,6 +201,7 @@ async function healthDegredation()
 function getHealthString(){
   totalHealth = 0;
   for(var i=0;i<game.party.length;i++){
+    game.party[i].health = parseInt(game.party[i].health);
     totalHealth += game.party[i].health;
   }
   avgHealth = totalHealth/game.party.length;
