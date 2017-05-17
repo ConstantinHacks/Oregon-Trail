@@ -22,6 +22,12 @@ body {
 	right: 25%;
 }
 
+#crash {
+	position: absolute;
+	top: 50%;
+	right: 50%;
+}
+
 .riverRocks {
 	position: absolute;
 }
