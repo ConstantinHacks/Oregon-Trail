@@ -1,27 +1,28 @@
 $(document).ready(function(){
-	$("#continue").hide();
-	$("#content").text("");
+	$("#userInput").hide();
+	$("#gameStage").text("");
 	currentGame = JSON.parse(localStorage.getItem('currentGame'));
 	fishing();
 });
 var hooked = false;
 var currentGame;
+
 async function fishing(){
 	var bitechance = 65;
-	currentGame.inventory.bait -= 1;
+	// currentGame.inventory.bait -= 1;
 	var time = Math.floor((Math.random() * 10) + 3);
 	var dots = 0;
 	while (dots < time){
-		$("#content").append(".");
+		$("#gameStage").append(".");
 		await sleep(500);
 		dots++;
 	}
 	var bite = Math.floor((Math.random() * 100) + 1);
 	if (bite > bitechance){
-		$("#content").text("Not even a nibble...");
+		$("#gameStage").text("Not even a nibble...");
 	}
 	else{
-		$("#content").append("Oh! A bite!");
+		$("#gameStage").append("Oh! A bite!");
 		var wait = (Math.floor((Math.random() * 3) + 1)) * 40;
 		var count = 0;
 		while (count < wait){
@@ -40,16 +41,17 @@ async function fishing(){
 		if (hooked){
 			hooked = false;
 			var fishWeight = Math.floor((Math.random() * 30) + 1);
-			$("#content").text("Congrats! You caught a "+fishWeight+"lb fish!");
-			currentGame.inventory.food += fishWeight;
+			$("#gameStage").text("Congrats! You caught a "+fishWeight+"lb fish!");
+			// currentGame.inventory.food += fishWeight;
 		}
 		else{
-			$("#content").text("It got away...");
+			$("#gameStage").text("It got away...");
 		}
 	}	
 	await sleep(2000);
-	$("#content").text("Would you like to continue fishing? (yes/no)");
-	$("#continue").show();
+	$("#gameStage").hide();
+	$("#userInput").show();
+	$("#userInput").focus();
 };
 
 function sleep(ms){
@@ -57,7 +59,7 @@ function sleep(ms){
 };
 
 function parseResponse(){
-	if($("#response").val() == "yes" || $("#response").val() == "Yes" || $("#response").val() == "y" || $("#response").val() == "Y"){
+	if($("#userInput").val() == "yes" || $("#userInput").val() == "Yes" || $("#userInput").val() == "y" || $("#userInput").val() == "Y"){
 		localStorage.setItem('currentGame', JSON.stringify(currentGame));
 		$(location).attr('href', 'fishing.html')
 	}
