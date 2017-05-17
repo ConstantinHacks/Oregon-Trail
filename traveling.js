@@ -21,6 +21,14 @@ $("#notification").css("display", "none");
 game.nextDistance = game.landmarks[0].distance;
 var nextDistance;
 var part;
+
+function Tombstone(name,message){
+  this.name = name;
+  this.message = message;
+}
+
+var tombStone = new Tombstone;
+
 // keypress handling and updating values when page loads
 $(document).ready(function(){
   // variable to help with loop control when traveling
@@ -215,6 +223,45 @@ function getHealthString(){
   } else {
     return "Very Poor"
   }
+}
+
+//check if there is a tombstone at the given distance
+function getIsTombStone(distance){
+  console.log("GET TOMB STONE");
+    $.ajax({
+    url: "getTombStone.php",
+    cache: false,
+    data: {totalDistance: distance},
+    success: function(result){
+      tombStone = JSON.parse(result).name , JSON.parse(result).message;
+      alert("You See a Tombstone\n" + JSON.parse(result).name + "\n" + JSON.parse(result).message);
+      return JSON.parse(result) != null;
+    },
+    error: function(){
+      return false
+    }
+  });
+}
+
+function makeTombStone(distance,playerName){
+    console.log("Make Tomb Stone");
+    $.ajax({
+    url: "makeTombStone.php",
+    cache: false,
+    data: {totalDistance: distance,
+      name: playerName,
+      DOD: game.date,
+      message: "They will be missed",
+      ts: new Date()
+  },
+    success: function(result){
+      console.log("result")
+      // return JSON.parse(result) != null;
+    },
+    error: function(){
+      // return false
+    }
+  });
 }
 
 function chaos()

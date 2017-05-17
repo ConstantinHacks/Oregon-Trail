@@ -37,11 +37,16 @@ class Common
 
 
 $totalDistance = $_POST["totalDistance"];
+$name = $_POST["name"];
+$DOD = $_POST["DOD"];
+$message = $_POST["message"];
+$ts = $_POST["ts"];
 
-$sql = "SELECT * FROM tombstones WHERE mile = $totalDistance";
+
+
+$sql = "INSERT INTO tombstones (count, timestamp, DOD, name, mile, message) VALUES (0,$ts,$DOD,$name,$totalDistance,$message)";
 $db = new Common();
 $rs = $db->executeQuery("$sql","getTombStones.php");
-$row = mysqli_fetch_array($rs,MYSQLI_ASSOC);
-echo json_encode($row);
+echo json_encode($rs);
 
 ?>
