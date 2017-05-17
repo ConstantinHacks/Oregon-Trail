@@ -2,6 +2,10 @@ body {
 	background-color: black;
 }
 
+input:focus {
+  outline: none;
+}
+
 #name
 {
   font-size: 30px;
@@ -40,12 +44,13 @@ body {
   -webkit-transform: translate(-50%,0%);
 }
 
-#userDirections
-{
+#userInput {
   position: absolute;
-  bottom: 5%;
-  color: white;
-  left: 50%;
-  -webkit-transform: translate(-50%,0%);
+  bottom: 1%;
+  width: 98%;
+  text-align: center;
   font-size: 30px;
+  background-color: black;
+  color: white;
+  border: none;
 }

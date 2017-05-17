@@ -8,15 +8,42 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
 game = JSON.parse(localStorage.getItem('currentGame'));
 river = new River(game.landmarks[0].name);
 game.date = new Date(JSON.parse(localStorage.getItem('currentGame')).date);
+
 $(document).ready(function(){
 	$("#name").html(game.landmarks[0].name + " Crossing");
   $("#date").html(monthNames[game.date.getMonth()]+" "+game.date.getDate()+", "+game.date.getFullYear());
 	$("#text").html("You must cross the river in order to continue. The river at this point is currently "
-		+ river.width + " feet across, and " + river.depth + " feet deep in the middle");
+		+ river.width + " feet across, and " + river.depth + " feet deep in the middle.<br><br>You may: <br><br>" +
+		"1) Attempt to ford the river<br>2) Caulk the wagon and float across.<br>3) Wait and see if conditions improve.<br>4)"
+		+ (river.ferry ? "Take a ferry." : "Hire an indian guide."));
+	$('#userInput').focus();
+  $('#userInput').focusout(function(){console.log("unfocus"); $('#userInput').focus();});
 	$(document).keypress(function(key){
-		if(key.which == 32)
+		if(key.which == 13)
 		{
-			
+      var userInput = document.getElementById("userInput").value;
+	  	//parses the input
+	  	if(userInput == 1)
+	  	{
+	  		ford(river.depth)
+	  	}
+	  	if(userInput == 2)
+	  	{
+	  		caulk(river);
+	  	}
+	  	if(userInput = 3)
+	  	{
+	  		if(river.ferry)
+	  		{
+	  			ferry();
+	  		}
+	  		else
+	  		{
+	  			indian();
+	  		}
+	  	}
+	  	//sets the input back to empty
+      document.getElementById("userInput").value = ""; // resets input
 		}
 	});
 
@@ -51,8 +78,9 @@ function River(name){
 }
 
 function ford(depth){
+	alert("begin ford");
 	if(depth > SAFE_DEPTH){
-		$("#text").text("The river is too deep to\nford. You lose:\n");
+		$("#text").text("The river is too deep to<br>ford. You lose:<br>");
 		var lostFood = 0;
 		var lostBait = 0;
 		var lostWagonParts = [];
@@ -183,25 +211,25 @@ function ford(depth){
 			if(game.inventory.oxen < 0){ game.inventory.oxen = 0; }
 		}
 		if(lostClothes != 0){
-			$("#notification").append(lostClothes + " set of clothing\n");
+			$("#text").append(lostClothes + " set of clothing<br>");
 		}
 		if(lostBait != 0){
-			$("#notification").append(lostBait + " bait\n");
+			$("#text").append(lostBait + " bait<br>");
 		}
 		if(lostWagonParts.length != 0){
 			for (part in lostWagonParts){
-				$("#notification").append(part + "\n");
+				$("#text").append(part + "<br>");
 			}
 		}
 		if(lostFood != 0){
-			$("#notification").append(lostFood + " pounds of food\n");
+			$("#text").append(lostFood + " pounds of food<br>");
 		}
 		if(lostOxen != 0){
-			$("#notification").append(lostOxen + " oxen\n");
+			$("#text").append(lostOxen + " oxen<br>");
 		}
 		if(lostPeople.length != 0){
 			for (person in lostPeople){
-				$("#notification").append(person + "\n");
+				$("#text").append(person + "<br>");
 			}
 		}
 	}
@@ -209,18 +237,19 @@ function ford(depth){
 		//display success message
 		var wet = Math.floor(Math.random()*100)+1;
 		if(wet % 3 == 0){
-			$("#notification").text("Your supplies got wet.\nLose 1 day.");
+			$("#text").text("Your supplies got wet.<br>Lose 1 day.");
 			game.date = new Date(game.date)+1;
 		}
 		else{
-			$("#notification").text("It was a muddy crossing,\nbut you did not get\nstuck.");
+			$("#text").text("It was a muddy crossing,<br>but you did not get<br>stuck.");
 		}
 	}
-	$("#notification").show();
+	$("#text").show();
 	while(true){
+		console.log("in while loop");
 		window.onkeyup = function(e){
 			if(e.which == 32){
-				$("#notification").hide();
+				$("#text").hide();
 				localStorage.setItem('currentGame', JSON.stringify(game));
 				$(location).attr('href', 'traveling.html')
 			}
@@ -235,7 +264,7 @@ function caulk(river){
 	while (feetTraveled < river.width){
 		if(feetTraveled != 0 && feetTraveled % 75 == 0){
 			if((Math.random()*100) < raftTips){
-				$("#notification").text("The wagon tipped over\nwhile floating. You lose:\n");
+				$("#text").text("The wagon tipped over<br>while floating. You lose:<br>");
 				var lostFood = 0;
 				var lostBait = 0;
 				var lostWagonParts = [];
@@ -366,34 +395,34 @@ function caulk(river){
 					if(game.inventory.oxen < 0){ game.inventory.oxen = 0; }
 				}
 				if(lostClothes != 0){
-					$("#notification").append(lostClothes + " set of clothing\n");
+					$("#text").append(lostClothes + " set of clothing<br>");
 				}
 				if(lostBait != 0){
-					$("#notification").append(lostBait + " bait\n");
+					$("#text").append(lostBait + " bait<br>");
 				}
 				if(lostWagonParts.length != 0){
 					for (part in lostWagonParts){
-						$("#notification").append(part + "\n");
+						$("#text").append(part + "<br>");
 					}
 				}
 				if(lostFood != 0){
-					$("#notification").append(lostFood + " pounds of food\n");
+					$("#text").append(lostFood + " pounds of food<br>");
 				}
 				if(lostOxen != 0){
-					$("#notification").append(lostOxen + " oxen\n");
+					$("#text").append(lostOxen + " oxen<br>");
 				}
 				if(lostPeople.length != 0){
 					for (person in lostPeople){
-						$("#notification").append(person + "\n");
+						$("#text").append(person + "<br>");
 					}
 				}
 				noTrouble = false;
-				$("#notification").show();
+				$("#text").show();
 				notified = true;
 				while(notified){
 					window.onkeyup = function(e){
 						if(e.which == 32){
-							$("#notification").hide();
+							$("#text").hide();
 							notified = false;
 						}
 					}
@@ -404,12 +433,12 @@ function caulk(river){
 	}
 	if(noTrouble){
 		//display no trouble message
-		$("#notification").text("You had no trouble\nfloating the wagon across.");
-		$("#notification").show();
+		$("#text").text("You had no trouble<br>floating the wagon across.");
+		$("#text").show();
 		while(true){
 			window.onkeyup = function(e){
 				if(e.which == 32){
-					$("#notification").hide();
+					$("#text").hide();
 					localStorage.setItem('currentGame', JSON.stringify(game));
 					$(location).attr('href', 'traveling.html')
 				}
