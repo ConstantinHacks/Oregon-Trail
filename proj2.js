@@ -125,6 +125,22 @@ function Traveler(name){
    this.health = GOOD_HEALTH;
    this.illness = 0;
 }
+//check if there is a tombstone at the given distance
+function getIsTombStone(distance){
+  console.log("GET TOMB STONE");
+    $.ajax({
+    url: "getTombStone.php",
+    cache: false,
+    data: {totalDistance: distance},
+    success: function(result){
+      console.log(JSON.parse(result) != null);
+      return JSON.parse(result) != null;
+    },
+    error: function(){
+      return false
+    }
+  });
+}
 
 //getHealthString determines the average health of the party and then returns the appropriate response
 function getHealthString(game){
