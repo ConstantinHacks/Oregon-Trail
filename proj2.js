@@ -760,6 +760,7 @@ function parseText(text)
           showRoadItem("buckets");
         } else if(selectionSet == STATUSSET){
           //TODO change pace
+		  redirect('paceChange.html',currentGame);
         }
         else
         {
@@ -785,6 +786,7 @@ function parseText(text)
           showRoadItem("wheels");
         } else if(selectionSet == STATUSSET){
           //TODO change ration
+		  redirect('changeRations.html',currentGame);
         }
         else
         {
