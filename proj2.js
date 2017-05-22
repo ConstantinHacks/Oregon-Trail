@@ -97,6 +97,7 @@ function Trade(requestedItem,requestAmount,offeredItem,offeredAmount){
   this.offeredAmount = offeredAmount;
 }
 
+
 var currentTrade; //stores the trade object currently being offered
 
 //Game Class initializes a new Game
