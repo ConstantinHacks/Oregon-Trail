@@ -17,18 +17,9 @@ VERY_POOR_HEALTH = 200;
 var atLandmark = false;
 // ensure notification element is hidden every time entering this page
 $("#notification").css("display", "none");
-// load in the next distance
-game.nextDistance = game.landmarks[0].distance;
+// load in the next distance 
 var nextDistance;
 var part;
-
-function Tombstone(name,message){
-  this.name = name;
-  this.message = message;
-}
-
-var tombStone = new Tombstone;
-
 // keypress handling and updating values when page loads
 $(document).ready(function(){
   // variable to help with loop control when traveling
@@ -225,45 +216,6 @@ function getHealthString(){
   }
 }
 
-//check if there is a tombstone at the given distance
-function getIsTombStone(distance){
-  console.log("GET TOMB STONE");
-    $.ajax({
-    url: "getTombStone.php",
-    cache: false,
-    data: {totalDistance: distance},
-    success: function(result){
-      tombStone = JSON.parse(result).name , JSON.parse(result).message;
-      alert("You See a Tombstone\n" + JSON.parse(result).name + "\n" + JSON.parse(result).message);
-      return JSON.parse(result) != null;
-    },
-    error: function(){
-      return false
-    }
-  });
-}
-
-function makeTombStone(distance,playerName){
-    console.log("Make Tomb Stone");
-    $.ajax({
-    url: "makeTombStone.php",
-    cache: false,
-    data: {totalDistance: distance,
-      name: playerName,
-      DOD: game.date,
-      message: "They will be missed",
-      ts: new Date()
-  },
-    success: function(result){
-      console.log("result")
-      // return JSON.parse(result) != null;
-    },
-    error: function(){
-      // return false
-    }
-  });
-}
-
 function chaos()
 {
   //returns a value in between 1 and 100
@@ -278,7 +230,7 @@ function chaos()
       // stalls progression for some days
       case 0:
       // stalls days
-        $("#notification").html("gets stuck");
+        $("#notification").html("Path was lost");
         $("#notification").css("display", "block");
         break;
       // obtain fruit
@@ -307,43 +259,54 @@ function chaos()
         }
         break;
       // bandits steal items      
-      case 3:
+/*      case 3:
         // selects a random item to steal from in inventory
         item = Math.floor(Math.random()*game.inventory.length);
         // gets a random number from what player has and steals at most half of that item and at least 1
         lost = Math.floor(Math.random(game.inventory[item]/2))+1;
         // displays notification
-        $("#notification").html("Bandits stole " + lost + " of your ...");
+        $("#notification").html("Bandits stole " + lost + " of your items");
         $("#notification").css("display","block");
         game.inventory
-        break;
+        break;*/
       // wagon part breaks
       case 4: 
         part = Math.floor(Math.random()*3);
         if(part == 0)
         {
-          $("#notification").html("Your wagon axel has broken would you like to repair it? Shift+y/n");
+          $("#notification").html("Your wagon axel has broken");
+          game.inventory.wagonAxle--;
           $("#notification").css("display","block");
           //look for input
         }
         else if(part == 1)
         {
-          $("#notification").html("Your wagon axel has broken would you like to repair it? Shift+y/n");
+          $("#notification").html("Your wagon tongue has broken");
+          game.inventory.wagonTongue--;
           $("#notification").css("display","block");
           //look for input
         }
         else
         {
-          $("#notification").html("Your wagon axel has broken would you like to repair it? Shift+y/n");
+          $("#notification").html("Your wagon wheel has broken");
+          game.inventory.wagonWheel--;
           $("#notification").css("display","block");   
           //look for input       
         }
         break; 
       // oxen dies   
       case 5:
-        $("#notification").html("oxen dies tetxt");
+        $("#notification").html("One of your ox has died");
         $("#notification").css("display", "block");
         game.inventory.oxen--;
+        break;
+      default:
+        // finds 1-25 lbs of fruit
+        amount = Math.floor(Math.random()*25)+1;
+        // displays notification
+        $("#notification").html("You found " + amount + " lbs of fruit");
+        $("#notification").css("display", "block");
+        game.inventory.food += amount;
         break;
     }
     return true;

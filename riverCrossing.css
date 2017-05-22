@@ -54,3 +54,16 @@ input:focus {
   color: white;
   border: none;
 }
+
+#prompt
+{
+  position: absolute;
+  bottom: 1%;
+  width: 98%;
+  text-align: center;
+  font-size: 30px;
+  background-color: black;
+  color: white;
+  border: none;
+  display: none;  
+}

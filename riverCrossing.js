@@ -18,6 +18,7 @@ $(document).ready(function(){
 		+ (river.ferry ? "Take a ferry." : "Hire an indian guide."));
 	$('#userInput').focus();
   $('#userInput').focusout(function(){console.log("unfocus"); $('#userInput').focus();});
+	
 	$(document).keypress(function(key){
 		if(key.which == 13)
 		{
@@ -45,6 +46,10 @@ $(document).ready(function(){
 	  	//sets the input back to empty
       document.getElementById("userInput").value = ""; // resets input
 		}
+		if(key.which == 32)
+		{
+			redirect("status.html", game);
+		}
 	});
 
 });
@@ -56,13 +61,13 @@ function River(name){
 		this.depth = Math.floor(Math.random() * (5 - 3 + 1) ) + 3;
 		this.ferry = true;
 	}
-	else if(name == "Green River")
+	else if(name == "Big Blue River")
 	{
 		this.width = Math.floor(Math.random() * (240 - 220 + 1) ) + 220;
 		this.depth = Math.floor(Math.random() * (4.5 - 2.5 + 1) ) + 3;
 		this.ferry = true;
 	}
-	else if(name == "Big Blue River")
+	else if(name == "Green River")
 	{
 		this.width = Math.floor(Math.random() * (1050 - 950 + 1) ) + 950;
 		this.depth = Math.floor(Math.random() * (21 - 19 + 1) ) + 19;
@@ -80,7 +85,7 @@ function River(name){
 function ford(depth){
 	alert("begin ford");
 	if(depth > SAFE_DEPTH){
-		$("#text").text("The river is too deep to<br>ford. You lose:<br>");
+		$("#text").html("The river is too deep to<br>ford. You lose:<br>");
 		var lostFood = 0;
 		var lostBait = 0;
 		var lostWagonParts = [];
@@ -237,24 +242,14 @@ function ford(depth){
 		//display success message
 		var wet = Math.floor(Math.random()*100)+1;
 		if(wet % 3 == 0){
-			$("#text").text("Your supplies got wet.<br>Lose 1 day.");
+			$("#text").html("Your supplies got wet.<br>Lose 1 day.");
 			game.date = new Date(game.date)+1;
 		}
 		else{
-			$("#text").text("It was a muddy crossing,<br>but you did not get<br>stuck.");
+			$("#text").html("It was a muddy crossing,<br>but you did not get<br>stuck.");
 		}
 	}
 	$("#text").show();
-	while(true){
-		console.log("in while loop");
-		window.onkeyup = function(e){
-			if(e.which == 32){
-				$("#text").hide();
-				localStorage.setItem('currentGame', JSON.stringify(game));
-				$(location).attr('href', 'traveling.html')
-			}
-		}
-	}
 }
 
 function caulk(river){
@@ -264,7 +259,7 @@ function caulk(river){
 	while (feetTraveled < river.width){
 		if(feetTraveled != 0 && feetTraveled % 75 == 0){
 			if((Math.random()*100) < raftTips){
-				$("#text").text("The wagon tipped over<br>while floating. You lose:<br>");
+				$("#text").html("The wagon tipped over<br>while floating. You lose:<br>");
 				var lostFood = 0;
 				var lostBait = 0;
 				var lostWagonParts = [];
@@ -272,7 +267,7 @@ function caulk(river){
 				var lostOxen = 0;
 				var lostPeople = [];
 				//determine what is lost and display
-				if(depth <= ROUGH_DEPTH){
+				if(river.depth <= ROUGH_DEPTH){
 					//see how much food/bait is lost
 					lostFood = Math.floor(Math.random()*50);
 					lostBait = Math.floor(Math.random()*50);
@@ -282,7 +277,7 @@ function caulk(river){
 					if(game.inventory.bait < 0){ game.inventory.bait = 0; }
 					
 				}
-				else if(depth <= SEVERE_DEPTH){
+				else if(river.depth <= SEVERE_DEPTH){
 					//see how much food/bait/parts/clothing is lost
 					lostFood = Math.floor(Math.random()*100);
 					lostBait = Math.floor(Math.random()*200);
@@ -417,44 +412,31 @@ function caulk(river){
 					}
 				}
 				noTrouble = false;
-				$("#text").show();
-				notified = true;
-				while(notified){
-					window.onkeyup = function(e){
-						if(e.which == 32){
-							$("#text").hide();
-							notified = false;
-						}
-					}
-				}
+				feetTraveled = river.width;
 			}
 		}
 		feetTraveled++;
 	}
 	if(noTrouble){
 		//display no trouble message
-		$("#text").text("You had no trouble<br>floating the wagon across.");
-		$("#text").show();
-		while(true){
-			window.onkeyup = function(e){
-				if(e.which == 32){
-					$("#text").hide();
-					localStorage.setItem('currentGame', JSON.stringify(game));
-					$(location).attr('href', 'traveling.html')
-				}
-			}
-		}
+		$("#text").html("You had no trouble<br>floating the wagon across.");
+		$("userInput").css("display", "none");
+		$("#prompt").css("display", "block");
 	}
 }
 
 function ferry(){
 	game.money -= 5;
-	//show animation/display success message
+	$("#text").html("You made it safely across");
+	$("userInput").css("display", "none");
+	$("#prompt").css("display", "block");
 }
 
 function indian(){
 	game.inventory.clothing -= 3;
-	//show animation/display success message
+	$("#text").html("You made it safely across");
+	$("userInput").css("display", "none");
+	$("#prompt").css("display", "block");
 }
 
 function waitForConditions(river){
@@ -469,7 +451,9 @@ function waitForConditions(river){
 	}
 }
 
-function getInfo(){
-	//display what info on fording and caulking, as well as ferries and the indian if they are available
-
+function redirect(path,gameState){
+	game.landmarks.splice(0,1);
+	game.nextDistance = game.landmarks[0].distance;
+  localStorage.setItem('currentGame', JSON.stringify(gameState));
+  $(location).attr('href', path)
 }

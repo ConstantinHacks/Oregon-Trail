@@ -19,8 +19,8 @@ function calculateHighScore(){
     highScore += currentGame.inventory.wagonTongue * 2;
     highScore += currentGame.inventory.wagonWheel * 2;
     highScore += currentGame.inventory.clothing * 2;
-    highScore += (currentGame.inventory.bait/50) * 2;
-    highScore += (currentGame.inventory.food/25) * 2;
+    highScore += Math.floor(currentGame.inventory.bait/50) * 2;
+    highScore += Math.floor(currentGame.inventory.food/25) * 2;
 
     if (currentGame.occupation == "Carpenter"){
         highScore *= 2
@@ -35,10 +35,18 @@ function calculateHighScore(){
 //$("#landmark").attr("src", "Locations/"+game.landmarks[0].name+".png");
 $(document).ready(function(){
   $("#landmark").attr("src", "Locations/"+game.landmarks[0].name+".png");
-
+  var currentGame = game;
   console.log(game.landmarks[0].name);
+  var multiplier = (currentGame.occupation == "Banker") ? 1 : ((currentGame.occupation == "Carpenter") ? 2 : 3);
   if(game.landmarks[0].name == "Willamette Valley"){
-    alert("You won! Your high score is:" + calculateHighScore())
+    $("#score").html("Congratulations! You completed The Oregon Trail!<br>Score:<br>Oxen: 4 * "+currentGame.inventory.oxen
+      +" = "+(currentGame.inventory.oxen * 4)+"<br>Spare Parts: 2 * "+currentGame.inventory.wagonAxle+currentGame.inventory.wagonWheel
+      +currentGame.inventory.wagonTongue+" = "+(currentGame.inventory.wagonAxle+currentGame.inventory.wagonWheel+currentGame.inventory.wagonTongue)*2
+      +"<br>Extra Clothes: 2 * "+currentGame.inventory.clothing+" = "+2*currentGame.inventory.clothing+"<br>Remaining Bait: 2 * "
+      +Math.floor(currentGame.inventory.bait/50)+" = "+2*Math.floor(currentGame.inventory.bait)+"<br>Leftover Food: 2 * "
+      +Math.floor(currentGame.inventory.food/25)+" = "+2*Math.floor(currentGame.inventory.food)+"<br><br>Mulitplier: "+multiplier+"<br><br>Final Score: "+calculateHighScore()
+      )
+    //alert("You won! Your high score is:" + calculateHighScore())
   }
 
   $("#loc").html(game.landmarks[0].name);
@@ -51,6 +59,7 @@ $(document).ready(function(){
       {
         //removes first element of landmarks to indicate moving on to next landmark
         game.landmarks.splice(0,1);
+        //game.nextDistance = game.landmarks[0].distance;
       }
       redirect("status.html",game);
     }

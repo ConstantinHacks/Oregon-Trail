@@ -97,7 +97,6 @@ function Trade(requestedItem,requestAmount,offeredItem,offeredAmount){
   this.offeredAmount = offeredAmount;
 }
 
-
 var currentTrade; //stores the trade object currently being offered
 
 //Game Class initializes a new Game
@@ -364,7 +363,7 @@ function purchase(amount){
   //add the selected item and amount to the store
   switch(itemForSale){
     case 'oxen':
-      currentStore.oxen = amount*2;
+      currentStore.oxen = amount;
       break;
     case 'food':
       currentStore.food = amount;
@@ -669,7 +668,6 @@ function parseText(text)
         } else if(selectionSet == STATUSSET){
           if(currentGame.landmarks[0].detail == "river" && currentGame.nextDistance == 0)
           {
-            currentGame.landmarks.splice(0,1);
             redirect('riverCrossing.html',currentGame)
           }
           else
@@ -677,6 +675,7 @@ function parseText(text)
             if(currentGame.landmarks[0].name == "Independence")
             {
               currentGame.landmarks.splice(0,1);
+              currentGame.nextDistance = 102;
             }
             redirect('traveling.html',currentGame);  
           }
@@ -794,7 +793,7 @@ function parseText(text)
         }
         break;
       case '6':
-        //do stuff
+        currentGame = JSON.parse(localStorage.getItem('currentGame'));
         console.log("selection was " + text);
         if(selectionSet == MENUSET)
         {
@@ -805,6 +804,14 @@ function parseText(text)
           showRoadItem("axles");
         } else if(selectionSet == STATUSSET){
           //TODO rest
+          currentGame.date = new Date(currentGame.date);
+          currentGame.date.setDate(currentGame.date.getDate()+1);
+          currentGame.inventory.food = Math.max(0, currentGame.inventory.food - currentGame.ration*currentGame.party.length);
+          for(i=0; i<currentGame.party.length; i++)
+          {
+            currentGame.party.health+= 20;
+          }
+          redirect("status.html", currentGame);
         }
         else
         {
@@ -921,7 +928,7 @@ function Items(){
     return this.wagonTongue+this.wagonAxle+this.wagonWheel;
   }
   this.getBill = function(){
-    return this.oxen/2 * OXENCOST + this.food * FOODCOST + this.clothing * CLOTHINGCOST +
+    return this.oxen * OXENCOST + this.food * FOODCOST + this.clothing * CLOTHINGCOST +
       this.bait * BAITBOXCOST + this.getNumSpareParts() * SPAREPARTCOST;
   }
 

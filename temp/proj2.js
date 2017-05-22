@@ -363,7 +363,7 @@ function purchase(amount){
   //add the selected item and amount to the store
   switch(itemForSale){
     case 'oxen':
-      currentStore.oxen = amount*2;
+      currentStore.oxen = amount;
       break;
     case 'food':
       currentStore.food = amount;
@@ -919,7 +919,7 @@ function Items(){
     return this.wagonTongue+this.wagonAxle+this.wagonWheel;
   }
   this.getBill = function(){
-    return this.oxen/2 * OXENCOST + this.food * FOODCOST + this.clothing * CLOTHINGCOST +
+    return this.oxen * OXENCOST + this.food * FOODCOST + this.clothing * CLOTHINGCOST +
       this.bait * BAITBOXCOST + this.getNumSpareParts() * SPAREPARTCOST;
   }
 
