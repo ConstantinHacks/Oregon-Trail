@@ -824,6 +824,7 @@ function parseText(text)
       case '8':
       if(selectionSet == STATUSSET){
         //TODO Talk
+		redirect("fishing.html",currentGame);
       }
       break;
       case '9':
